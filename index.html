@@ -844,12 +844,433 @@
     }
 
     /* =====================================================
+       BLOCK 3.5 — ARTÍCULOS / LA LETRA PEQUEÑA
+    ===================================================== */
+    #articulos {
+      padding: 100px 0;
+      background: var(--bg-primary);
+    }
+
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 0;
+    }
+
+    .article-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.45);
+      border-color: rgba(0, 230, 118, 0.25);
+    }
+
+    .article-card-header {
+      padding: 28px 28px 0;
+    }
+
+    .article-edition {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .article-edition::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .article-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.2px;
+      margin-bottom: 12px;
+    }
+
+    .article-card-excerpt {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      padding: 0 28px;
+      margin-top: 10px;
+    }
+
+    .article-card-footer {
+      margin-top: auto;
+      padding: 20px 28px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+
+    .article-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .article-tag {
+      background: rgba(0, 230, 118, 0.08);
+      border: 1px solid rgba(0, 230, 118, 0.15);
+      color: var(--accent);
+      font-size: 0.67rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 100px;
+    }
+
+    .article-read-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font);
+      white-space: nowrap;
+      transition: gap 0.2s ease;
+      padding: 0;
+    }
+
+    .article-read-btn:hover { gap: 10px; }
+
+    .article-read-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--accent);
+    }
+
+    /* Placeholder cards (próximamente) */
+    .article-card.coming-soon {
+      opacity: 0.45;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .article-card.coming-soon:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border);
+    }
+
+    .coming-soon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(148, 163, 184, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+    }
+
+    /* =====================================================
+       MODAL — FULL ARTICLE READER
+    ===================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(7, 10, 18, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 760px;
+      transform: translateY(24px);
+      transition: transform 0.35s ease;
+      overflow: hidden;
+    }
+
+    .modal-overlay.open .modal-box {
+      transform: translateY(0);
+    }
+
+    .modal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg-secondary);
+      z-index: 1;
+    }
+
+    .modal-brand {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .modal-brand span { color: var(--accent); }
+
+    .modal-close {
+      background: rgba(148,163,184,0.1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.1rem;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      font-family: var(--font);
+    }
+
+    .modal-close:hover {
+      background: rgba(148,163,184,0.18);
+      color: var(--text-primary);
+    }
+
+    .modal-content {
+      padding: 40px 48px 56px;
+    }
+
+    .modal-edition {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-edition::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .modal-title {
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.8px;
+      margin-bottom: 20px;
+    }
+
+    .modal-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .modal-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), #00A854);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .modal-author { font-size: 0.875rem; font-weight: 600; }
+    .modal-date { font-size: 0.8rem; color: var(--text-secondary); }
+
+    .modal-read-time {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      background: rgba(148,163,184,0.08);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    /* Article body typography */
+    .article-body { font-size: 1rem; line-height: 1.8; color: var(--text-primary); }
+
+    .article-body h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      margin: 40px 0 14px;
+      color: var(--text-primary);
+    }
+
+    .article-body h2:first-child { margin-top: 0; }
+
+    .article-body p { margin-bottom: 18px; color: rgba(255,255,255,0.88); }
+
+    .article-body p:last-child { margin-bottom: 0; }
+
+    .article-body strong { color: var(--text-primary); font-weight: 700; }
+
+    .article-body em { color: var(--text-secondary); font-style: italic; }
+
+    /* Pull quote */
+    .article-pullquote {
+      border-left: 3px solid var(--accent);
+      padding: 16px 24px;
+      margin: 32px 0;
+      background: rgba(0, 230, 118, 0.05);
+      border-radius: 0 8px 8px 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+
+    /* Data callout box */
+    .article-databox {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 28px 0;
+    }
+
+    .article-databox-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .article-databox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .databox-item { text-align: center; }
+
+    .databox-value {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.3px;
+    }
+
+    .databox-label {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* Analogy box */
+    .article-analogy {
+      background: rgba(0, 230, 118, 0.04);
+      border: 1px solid rgba(0, 230, 118, 0.15);
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin: 28px 0;
+    }
+
+    .article-analogy-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .article-analogy p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    /* Modal disclaimer */
+    .modal-disclaimer {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      opacity: 0.7;
+    }
+
+    /* =====================================================
        RESPONSIVE — MOBILE FIRST
     ===================================================== */
     @media (max-width: 900px) {
-      .pillars-grid {
+      .pillars-grid,
+      .articles-grid {
         grid-template-columns: 1fr;
       }
+
+      .modal-content { padding: 28px 24px 40px; }
+
+      .article-databox-grid { grid-template-columns: repeat(3, 1fr); }
+    }
 
       .split-grid {
         grid-template-columns: 1fr;
@@ -917,6 +1338,7 @@
         <ul class="nav-links" role="list">
           <li><a href="#hero">Inicio</a></li>
           <li><a href="#newsletter">La Newsletter</a></li>
+          <li><a href="#articulos">Artículos</a></li>
           <li><a href="#filosofia">Filosofía</a></li>
         </ul>
 
@@ -939,6 +1361,7 @@
     <nav class="nav-mobile" id="navMobile" role="navigation" aria-label="Menú móvil">
       <a href="#hero" class="nav-mobile-link">Inicio</a>
       <a href="#newsletter" class="nav-mobile-link">La Newsletter</a>
+      <a href="#articulos" class="nav-mobile-link">Artículos</a>
       <a href="#filosofia" class="nav-mobile-link">Filosofía</a>
       <a href="#suscripcion" class="btn-primary">Suscribirme</a>
     </nav>
@@ -1061,6 +1484,213 @@
         </div>
       </div>
     </section>
+
+
+    <!-- =====================================================
+         BLOCK 3.5 — ARTÍCULOS: LA LETRA PEQUEÑA
+    ===================================================== -->
+    <section id="articulos" aria-labelledby="articulos-heading">
+      <div class="container">
+
+        <div class="section-header reveal">
+          <p class="section-tag">Archivo · La Letra Pequeña</p>
+          <h2 id="articulos-heading">Análisis que no encontrarás<br />en <span class="accent">ningún otro sitio</span></h2>
+          <p class="section-subtitle">Cada edición, un tema. Sin relleno, sin agenda comercial. Solo el análisis que mereces.</p>
+        </div>
+
+        <div class="articles-grid">
+
+          <!-- ARTÍCULO 1: El oro -->
+          <article class="article-card reveal" role="button" tabindex="0" aria-label="Leer artículo: Por qué el oro no es solo un activo refugio" onclick="openArticle('oro')" onkeydown="if(event.key==='Enter'||event.key===' ')openArticle('oro')">
+            <div class="article-card-header">
+              <div class="article-edition">Edición #01 · Activos Alternativos</div>
+              <h3>Por qué el oro no es solo un activo refugio</h3>
+            </div>
+            <p class="article-card-excerpt">
+              La narrativa del oro como "puerto seguro" es real pero incompleta. Hay una correlación inversa con los tipos reales, una demanda industrial creciente y un papel geopolítico que la mayoría de inversores ignora por completo.
+            </p>
+            <div class="article-card-footer">
+              <div class="article-tags">
+                <span class="article-tag">Oro</span>
+                <span class="article-tag">Macro</span>
+                <span class="article-tag">Bancos Centrales</span>
+              </div>
+              <button class="article-read-btn" tabindex="-1" aria-hidden="true">
+                Leer
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Placeholder #2 -->
+          <article class="article-card coming-soon reveal">
+            <div class="article-card-header">
+              <div class="coming-soon-badge">Próximamente</div>
+              <h3>La ilusión del depósito bancario: lo que el 3% no te cuenta</h3>
+            </div>
+            <p class="article-card-excerpt">
+              Cuando el IPC supera la rentabilidad nominal de tu depósito, estás perdiendo poder adquisitivo en tiempo real. Analizamos el coste real de "no hacer nada" con tu dinero.
+            </p>
+            <div class="article-card-footer">
+              <div class="article-tags">
+                <span class="article-tag">Inflación</span>
+                <span class="article-tag">Banca</span>
+                <span class="article-tag">Ahorro</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Placeholder #3 -->
+          <article class="article-card coming-soon reveal">
+            <div class="article-card-header">
+              <div class="coming-soon-badge">Próximamente</div>
+              <h3>Curva de tipos invertida: el indicador que casi siempre acierta</h3>
+            </div>
+            <p class="article-card-excerpt">
+              Desde 1970, cada recesión en EE.UU. ha venido precedida por una inversión de la curva de tipos. Explicamos el mecanismo, sus límites y cómo leerla en tiempo real.
+            </p>
+            <div class="article-card-footer">
+              <div class="article-tags">
+                <span class="article-tag">Renta Fija</span>
+                <span class="article-tag">Recesión</span>
+                <span class="article-tag">Fed</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         MODAL — ARTÍCULO COMPLETO: EL ORO
+    ===================================================== -->
+    <div id="modal-oro" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-oro-title" onclick="closeArticleOnOverlay(event, 'oro')">
+      <div class="modal-box">
+
+        <div class="modal-topbar">
+          <span class="modal-brand"><span>@</span>eduinvest · La Letra Pequeña</span>
+          <button class="modal-close" onclick="closeArticle('oro')" aria-label="Cerrar artículo">✕</button>
+        </div>
+
+        <div class="modal-content">
+          <div class="modal-edition">Edición #01 · Activos Alternativos</div>
+
+          <h1 id="modal-oro-title" class="modal-title">
+            Por qué el oro no es solo un activo refugio
+          </h1>
+
+          <div class="modal-meta-row">
+            <div class="modal-avatar" aria-hidden="true">ei</div>
+            <div>
+              <div class="modal-author">@eduinvest</div>
+              <div class="modal-date">La Letra Pequeña · Edición #01</div>
+            </div>
+            <span class="modal-read-time">~8 min de lectura</span>
+          </div>
+
+          <div class="article-body">
+
+            <h2>Introducción: el relato incompleto del "puerto seguro"</h2>
+
+            <p>
+              Cuando los mercados tiemblan, la narrativa es siempre la misma: "el oro sube porque los inversores buscan refugio". Es cierto. Pero es una verdad tan parcial que, tomada como única explicación, puede llevarte a tomar decisiones de inversión erróneas.
+            </p>
+
+            <p>
+              El oro no es un activo simple. Es simultáneamente una materia prima industrial, una reserva de valor milenaria, un instrumento de política monetaria para los bancos centrales y un termómetro de la confianza en el sistema financiero global. Entenderlo solo como "refugio" es como describir el agua diciendo únicamente que apaga la sed.
+            </p>
+
+            <div class="article-pullquote">
+              El oro no sube porque la gente tiene miedo. El oro sube cuando el coste de oportunidad de tenerlo cae —y eso ocurre en circunstancias mucho más específicas de lo que la mayoría cree.
+            </div>
+
+            <h2>El motor técnico: tipos reales negativos</h2>
+
+            <p>
+              El principal driver del precio del oro no es el miedo genérico: es la evolución de los <strong>tipos de interés reales</strong> (tipos nominales menos inflación esperada). La correlación es robusta, documentada y tiene una lógica económica perfectamente coherente.
+            </p>
+
+            <p>
+              El oro no ofrece cupón, dividendo ni renta. Tenerlo tiene un coste de oportunidad: todo lo que podrías ganar si invirtieras ese capital en un bono del Tesoro, por ejemplo. Cuando los tipos reales son elevados y positivos, ese coste de oportunidad es alto, y el oro resulta poco atractivo. Cuando los tipos reales caen —porque la inflación supera a los tipos nominales, o porque los bancos centrales recortan agresivamente— el coste de oportunidad del oro se desvanece, y el activo se vuelve competitivo.
+            </p>
+
+            <div class="article-analogy">
+              <div class="article-analogy-label">Analogía · Vida cotidiana</div>
+              <p>
+                Imagina que tienes 10.000€ guardados en casa en un cajón. Si el banco te ofrece un depósito al 4%, el coste de tener ese dinero en el cajón es de 400€ al año en intereses que dejas de ganar. Eso es exactamente lo que ocurre con el oro: no "produce" nada, y cuando el dinero en "el cajón del sistema" (bonos, depósitos) ofrece rentabilidad real positiva, el oro pierde atractivo. Cuando los tipos reales van a cero o negativo, guardar el dinero "en el cajón de oro" ya no tiene tanto coste relativo. Y el precio sube.
+              </p>
+            </div>
+
+            <div class="article-databox">
+              <div class="article-databox-label">Datos clave · Correlación oro / tipos reales</div>
+              <div class="article-databox-grid">
+                <div class="databox-item">
+                  <div class="databox-value">−0.82</div>
+                  <div class="databox-label">Correlación histórica oro vs. TIPS 10Y EE.UU.</div>
+                </div>
+                <div class="databox-item">
+                  <div class="databox-value">+68%</div>
+                  <div class="databox-label">Subida del oro en 2020 (tipos reales al −1%)</div>
+                </div>
+                <div class="databox-item">
+                  <div class="databox-value">−28%</div>
+                  <div class="databox-label">Caída del oro en 2022 (tipos reales al +1.5%)</div>
+                </div>
+              </div>
+            </div>
+
+            <h2>Desarrollo: más allá del refugio — los tres factores ignorados</h2>
+
+            <p>
+              Una vez establecida la correlación con los tipos reales, hay otros tres vectores que la mayoría de analistas de retail subestiman gravemente.
+            </p>
+
+            <p>
+              <strong>1. Demanda de bancos centrales:</strong> Desde 2010, y de forma acelerada tras las sanciones a Rusia en 2022, los bancos centrales de economías emergentes —China, India, Polonia, Turquía— llevan comprando oro de forma sistemática para reducir su exposición al dólar. En 2023, los bancos centrales compraron más de 1.000 toneladas de oro por segundo año consecutivo. Esto no es un fenómeno cíclico: es una tendencia estructural de dedolarización que tiene décadas por delante.
+            </p>
+
+            <p>
+              <strong>2. Demanda industrial y tecnológica:</strong> El oro no es solo joyería y lingotes. Es un conductor eléctrico excepcional con resistencia a la corrosión que lo hace imprescindible en electrónica de precisión, conectores, semiconductores y, de forma creciente, en tecnología médica y aeroespacial. Aproximadamente el 10% de la demanda anual es industrial, y ese porcentaje crece. No es el factor dominante del precio, pero añade un suelo estructural que la narrativa "refugio" ignora.
+            </p>
+
+            <p>
+              <strong>3. Comportamiento en distintos ciclos de mercado:</strong> La correlación del oro con la renta variable es cercana a cero a largo plazo, pero varía significativamente según el régimen de mercado. En recesiones deflacionarias (2008-2009), el oro inicialmente cae junto a todo lo demás, porque los inversores liquidan posiciones para cubrir pérdidas en otros activos. Pero se recupera mucho más rápido. En entornos de estanflación (inflación + bajo crecimiento, como los años 70 o 2022), el oro brilla con especial intensidad. En expansiones con tipos bajos (2009-2020), también sube. El único entorno donde pierde atractivo de forma sostenida es el de crecimiento sólido con tipos reales positivos y altos.
+            </p>
+
+            <div class="article-pullquote">
+              Los bancos centrales de economías emergentes no compran oro porque tengan miedo. Lo compran porque quieren independencia del sistema financiero occidental. Eso es una demanda estructural, no especulativa.
+            </div>
+
+            <h2>Conclusión: ¿cómo pensar el oro en cartera?</h2>
+
+            <p>
+              El oro es un activo legítimo y con fundamentos sólidos. Pero solo tiene sentido tenerlo si entiendes <em>exactamente</em> qué papel cumple y qué condiciones lo favorecen.
+            </p>
+
+            <p>
+              No es una apuesta al apocalipsis. Es una cobertura eficiente contra la pérdida de valor de las divisas fiduciarias, contra los tipos reales negativos y contra la inestabilidad geopolítica que fragmenta el orden financiero global. En ese sentido, puede tener un lugar en una cartera diversificada —típicamente entre un 5% y un 15%— no como especulación, sino como póliza de seguro con fundamento macroeconómico.
+            </p>
+
+            <p>
+              Lo que no debes hacer es comprarlo porque "sube cuando hay miedo" y venderlo cuando "la situación se calma". Eso es reaccionar a la narrativa, no al análisis. Y en los mercados, la narrativa siempre llega tarde.
+            </p>
+
+            <p>
+              <strong>La pregunta que debes hacerte antes de incluir oro en cartera no es "¿está el mundo en peligro?". La pregunta correcta es: "¿cuál es mi visión sobre los tipos reales en los próximos 12-24 meses, y qué peso tienen la dedolarización y el riesgo geopolítico en mi tesis de inversión?"</strong>
+            </p>
+
+            <div class="modal-disclaimer">
+              Este artículo tiene carácter exclusivamente educativo e informativo. No constituye asesoramiento financiero ni recomendación de inversión. Invertir en materias primas implica riesgo de pérdida de capital.
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
 
 
     <!-- =====================================================
@@ -1352,6 +1982,38 @@
       // NOTE: wire up to your email provider (Beehiiv, Mailchimp, etc.) here
       form.style.display = 'none';
       formSuccess.classList.add('show');
+    });
+
+    // --- Article modal ---
+    function openArticle(id) {
+      const overlay = document.getElementById('modal-' + id);
+      if (!overlay) return;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      overlay.scrollTop = 0;
+      // Focus the close button for accessibility
+      overlay.querySelector('.modal-close').focus();
+    }
+
+    function closeArticle(id) {
+      const overlay = document.getElementById('modal-' + id);
+      if (!overlay) return;
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeArticleOnOverlay(e, id) {
+      if (e.target === e.currentTarget) closeArticle(id);
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(m => {
+          m.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      }
     });
   </script>
 
