@@ -728,6 +728,24 @@
 
     .form-success.show { display: block; }
 
+    /* Beehiiv embed — wrapper keeps spacing/alignment consistent with the rest of the form column */
+    .beehiiv-embed-wrapper {
+      width: 100%;
+    }
+
+    .form-privacy-note {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-top: 14px;
+    }
+
+    .form-privacy-note a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
     .form-success-icon {
       font-size: 2.5rem;
       margin-bottom: 12px;
@@ -2056,55 +2074,14 @@
               Cada lunes, directamente en tu bandeja de entrada. Sin algoritmos, sin publicidad, sin afiliados. Solo criterio.
             </p>
 
-            <!-- Form -->
-            <form id="subscribeForm" novalidate class="reveal" aria-label="Formulario de suscripción">
-
-              <div class="form-group">
-                <label for="emailInput" class="sr-only">Tu email principal</label>
-                <input
-                  type="email"
-                  id="emailInput"
-                  name="email"
-                  class="form-input"
-                  placeholder="Introduce tu email principal"
-                  autocomplete="email"
-                  required
-                  aria-required="true"
-                  aria-describedby="emailError"
-                />
-                <span id="emailError" class="form-error-msg" role="alert">Por favor, introduce un email válido.</span>
-              </div>
-
-              <div class="form-group">
-                <div class="checkbox-group">
-                  <input
-                    type="checkbox"
-                    id="privacyCheck"
-                    name="privacy"
-                    class="checkbox-input"
-                    required
-                    aria-required="true"
-                    aria-describedby="privacyError"
-                  />
-                  <label for="privacyCheck" class="checkbox-label">
-                    He leído y acepto la <a href="#politica-privacidad">Política de Privacidad</a>. Entiendo que mis datos serán usados exclusivamente para el envío de la newsletter y no serán cedidos a terceros.
-                  </label>
-                </div>
-                <span id="privacyError" class="form-error-msg" role="alert">Debes aceptar la política de privacidad.</span>
-              </div>
-
-              <button type="submit" class="btn-primary btn-submit">
-                Unirme a la comunidad
-              </button>
-
-            </form>
-
-            <!-- Success state -->
-            <div id="formSuccess" class="form-success" role="status" aria-live="polite">
-              <div class="form-success-icon" aria-hidden="true">✓</div>
-              <h3>¡Bienvenido a La Letra Pequeña!</h3>
-              <p>Revisa tu bandeja de entrada para confirmar tu suscripción. Te esperamos cada lunes.</p>
+            <!-- Beehiiv subscribe form (real submission — replaces the old static/fake form) -->
+            <div class="beehiiv-embed-wrapper reveal" aria-label="Formulario de suscripción">
+              <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="b6e7bdab-3931-4b77-bd06-ce20ce3ce6f4"></script>
             </div>
+
+            <p class="form-privacy-note">
+              Al suscribirte aceptas nuestra <a href="#politica-privacidad">Política de Privacidad</a>. Tus datos se usan exclusivamente para el envío de la newsletter y no se ceden a terceros.
+            </p>
 
           </div>
         </div>
@@ -2211,50 +2188,8 @@
 
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    // --- Form validation & submission ---
-    const form       = document.getElementById('subscribeForm');
-    const emailInput = document.getElementById('emailInput');
-    const emailError = document.getElementById('emailError');
-    const privCheck  = document.getElementById('privacyCheck');
-    const privError  = document.getElementById('privacyError');
-    const formSuccess = document.getElementById('formSuccess');
-
-    function isValidEmail(value) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-    }
-
-    function validateEmail() {
-      const valid = isValidEmail(emailInput.value);
-      emailInput.classList.toggle('error', !valid);
-      emailError.classList.toggle('show', !valid);
-      return valid;
-    }
-
-    function validatePrivacy() {
-      const valid = privCheck.checked;
-      privError.classList.toggle('show', !valid);
-      return valid;
-    }
-
-    emailInput.addEventListener('blur', validateEmail);
-    emailInput.addEventListener('input', () => {
-      if (emailInput.classList.contains('error')) validateEmail();
-    });
-
-    privCheck.addEventListener('change', validatePrivacy);
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const emailOk   = validateEmail();
-      const privacyOk = validatePrivacy();
-
-      if (!emailOk || !privacyOk) return;
-
-      // Replace form with success message
-      // NOTE: wire up to your email provider (Beehiiv, Mailchimp, etc.) here
-      form.style.display = 'none';
-      formSuccess.classList.add('show');
-    });
+    // Subscription form: handled by the Beehiiv embed script (see #suscripcion section).
+    // No custom validation/submit logic needed here anymore.
 
     // --- Article modal ---
     function openArticle(id) {
