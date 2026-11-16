@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="@eduinvest — La Letra Pequeña. Análisis de mercados, macroeconomía y finanzas sin rodeos, cada lunes en tu bandeja." />
+  <meta name="robots" content="noindex" />
+  <title>@eduinvest — La Letra Pequeña (preview)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =====================================================
+       DESIGN TOKENS
+       Formato inspirado en Mercury: pesos tipográficos medios,
+       botones píldora, secciones que cambian de tema (oscuro ↔ claro)
+       al hacer scroll y maquetas de producto con profundidad.
+    ===================================================== */
+    :root {
+      --accent: #00E676;
+      --accent-strong: #00C664;
+      --accent-ink: #03130A;          /* texto sobre verde */
+      --accent-on-light: #00894A;     /* verde legible sobre fondo claro */
+      --ease: cubic-bezier(0, 0, .6, 1);
+      --theme-dur: .5s;
+      --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --maxw: 1024px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --pill: 999px;
+
+      /* Tema oscuro (por defecto) */
+      --bg: #0B0F19;
+      --fg: #EDEDF3;
+      --muted: #94A3B8;
+      --line: rgba(175, 178, 206, 0.16);
+      --line-strong: rgba(237, 237, 243, 0.55);
+      --card: #161C2A;
+      --card-2: #1C2333;
+      --ghost-bg: rgba(175, 178, 206, 0.16);
+      --ghost-border: rgba(175, 178, 206, 0.32);
+      --nav-bg: rgba(11, 15, 25, 0.82);
+      --link-accent: var(--accent);
+    }
+
+    /* El <body> cambia de tema según la sección visible */
+    body[data-theme="light"] {
+      --bg: #F7F8FA;
+      --fg: #14161F;
+      --muted: #5B6274;
+      --line: rgba(20, 22, 31, 0.12);
+      --line-strong: rgba(20, 22, 31, 0.7);
+      --card: #FFFFFF;
+      --card-2: #EEF0F4;
+      --ghost-bg: rgba(20, 22, 31, 0.06);
+      --ghost-border: rgba(20, 22, 31, 0.14);
+      --nav-bg: rgba(247, 248, 250, 0.85);
+      --link-accent: var(--accent-on-light);
+    }
+
+    body[data-theme="warm"] {
+      --bg: #F4F2EE;
+      --fg: #17181C;
+      --muted: #5E5F66;
+      --line: rgba(23, 24, 28, 0.12);
+      --line-strong: rgba(23, 24, 28, 0.7);
+      --card: #FBFAF8;
+      --card-2: #ECE8E1;
+      --ghost-bg: rgba(23, 24, 28, 0.06);
+      --ghost-border: rgba(23, 24, 28, 0.14);
+      --nav-bg: rgba(244, 242, 238, 0.85);
+      --link-accent: var(--accent-on-light);
+    }
+
+    /* =====================================================
+       BASE
+    ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.5;
+      background-color: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color var(--theme-dur) var(--ease), color var(--theme-dur) var(--ease);
+    }
+
+    /* Elementos con color propio que deben acompañar la transición de tema */
+    .th {
+      transition: color var(--theme-dur) var(--ease),
+                  background-color var(--theme-dur) var(--ease),
+                  border-color var(--theme-dur) var(--ease);
+    }
+
+    img { max-width: 100%; display: block; }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: 100%;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .display {
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+    }
+
+    h2.display { font-size: clamp(1.9rem, 3.6vw, 2.65rem); }
+
+    .eyebrow {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    sup { font-size: 0.6em; line-height: 0; }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    /* Aparición suave al hacer scroll */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* =====================================================
+       BOTONES PÍLDORA
+    ===================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 22px;
+      border-radius: var(--pill);
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+    }
+
+    .btn-primary { background: var(--accent); color: var(--accent-ink); }
+    .btn-primary:hover { background: var(--accent-strong); box-shadow: 0 6px 22px rgba(0, 230, 118, .28); }
+
+    .btn-ghost {
+      background: var(--ghost-bg);
+      border-color: var(--ghost-border);
+      color: var(--fg);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
+    .btn-ghost:hover { background: rgba(175, 178, 206, .26); }
+
+    .btn svg { width: 15px; height: 15px; }
+
+    .text-link {
+      color: var(--fg);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 5px;
+      font-weight: 500;
+    }
+
+    .round-arrow {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--ghost-bg);
+      border: 1px solid var(--ghost-border);
+      transition: transform .3s var(--ease), background-color .3s var(--ease);
+    }
+    .round-arrow svg { width: 16px; height: 16px; }
+
+    /* =====================================================
+       NAVBAR — transparente sobre el hero, sólida al hacer scroll
+    ===================================================== */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 100;
+      transition: background-color var(--theme-dur) var(--ease), box-shadow .3s var(--ease), color var(--theme-dur) var(--ease);
+    }
+
+    .nav.scrolled {
+      background: var(--nav-bg);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 var(--line);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      padding: 0 32px;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid currentColor;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.95rem;
+      letter-spacing: 0;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { text-decoration: none; font-size: 0.95rem; opacity: .92; transition: opacity .2s; }
+    .nav-links a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
+
+    .nav-right { display: flex; align-items: center; gap: 22px; }
+    .nav-right .plain { text-decoration: none; font-size: 0.95rem; }
+
+    .nav-toggle {
+      display: none;
+      width: 48px; height: 48px;
+      align-items: center; justify-content: center;
+      background: none; border: 0; color: inherit; cursor: pointer;
+    }
+    .nav-toggle svg { width: 22px; height: 22px; }
+
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      padding: 8px 24px 24px;
+      background: var(--nav-bg);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+    }
+    .nav-mobile a:not(.btn) { padding: 14px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-size: 1.05rem; }
+    .nav-mobile .btn { margin-top: 18px; height: 48px; }
+    .nav.open .nav-mobile { display: flex; }
+    .nav.open { background: var(--nav-bg); }
+
+    /* =====================================================
+       HERO — paisaje cinematográfico: las montañas son gráficos de precio
+    ===================================================== */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      color: #EDEDF3;
+      background:
+        radial-gradient(ellipse 70% 45% at 50% 82%, rgba(0, 230, 118, .22), transparent 70%),
+        radial-gradient(ellipse 50% 30% at 70% 70%, rgba(255, 168, 120, .10), transparent 70%),
+        radial-gradient(ellipse 40% 30% at 22% 68%, rgba(120, 140, 255, .14), transparent 70%),
+        linear-gradient(180deg, #05070E 0%, #0B1126 30%, #142039 58%, #1A3540 74%, #0B0F19 100%);
+    }
+
+    /* Bruma que se desplaza lentamente */
+    .mist {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(220, 230, 255, .10), transparent 65%);
+      filter: blur(10px);
+      pointer-events: none;
+      animation: drift 38s ease-in-out infinite alternate;
+    }
+    .mist.m1 { width: 900px; height: 200px; left: -200px; top: 58%; }
+    .mist.m2 { width: 1100px; height: 240px; right: -300px; top: 64%; animation-duration: 46s; animation-direction: alternate-reverse; }
+    .mist.m3 { width: 700px; height: 160px; left: 30%; top: 72%; animation-duration: 30s; opacity: .8; }
+
+    @keyframes drift { from { transform: translateX(-60px); } to { transform: translateX(80px); } }
+
+    .hero-landscape {
+      position: absolute;
+      inset: auto 0 0 0;
+      width: 100%;
+      height: 62%;
+      pointer-events: none;
+    }
+
+    .price-line {
+      stroke-dasharray: 2400;
+      stroke-dashoffset: 2400;
+      animation: drawLine 3.2s var(--ease) .4s forwards;
+    }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+    .last-price { opacity: 0; animation: fadeIn .6s ease 3.4s forwards; }
+    .last-price .pulse { transform-origin: 1438px 382.8px; animation: pulse 2.4s ease-out 3.6s infinite; }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes pulse { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(3.2); opacity: 0; } }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 150px 24px 0;
+      max-width: 820px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5.2vw, 3.6rem);
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+
+    .hero-sub {
+      font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+      color: rgba(237, 237, 243, .82);
+      max-width: 620px;
+      margin: 0 auto 34px;
+      line-height: 1.5;
+    }
+
+    /* Formulario píldora con efecto cristal (email + botón dentro) */
+    .hero-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+    .email-pill {
+      display: flex;
+      align-items: center;
+      width: min(440px, 100%);
+      height: 52px;
+      padding: 4px;
+      border-radius: var(--pill);
+      background: rgba(175, 178, 206, .16);
+      border: 1px solid rgba(175, 178, 206, .32);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
+    }
+    .email-pill:focus-within { border-color: rgba(0, 230, 118, .6); box-shadow: 0 0 0 4px rgba(0, 230, 118, .12); }
+    .email-pill.error { border-color: #FF6B6B; }
+
+    .email-pill input {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      background: transparent;
+      border: 0;
+      outline: none;
+      color: inherit;
+      font-family: var(--font);
+      font-size: 0.98rem;
+      padding: 0 18px;
+    }
+    .email-pill input::placeholder { color: rgba(237, 237, 243, .6); }
+    .email-pill .btn { height: 42px; }
+
+    .hero .btn-ghost { height: 52px; color: #EDEDF3; }
+
+    .consent {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: rgba(237, 237, 243, .7);
+    }
+    .consent input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+    .consent a { color: inherit; text-underline-offset: 3px; }
+
+    .form-msg { min-height: 22px; margin-top: 8px; font-size: 0.85rem; }
+    .form-msg.err { color: #FF8A8A; }
+    .form-msg.ok { color: var(--accent); }
+
+    .hero-note {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      width: max-content;
+      max-width: calc(100% - 32px);
+      padding: 10px 20px;
+      border-radius: 12px;
+      background: rgba(11, 15, 25, .72);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      font-size: 0.8rem;
+      color: rgba(237, 237, 243, .85);
+      text-align: center;
+    }
+
+    /* =====================================================
+       MAQUETA DE PRODUCTO — portátil que se endereza al hacer scroll
+    ===================================================== */
+    .device-stage {
+      position: relative;
+      padding: 40px 24px 140px;
+      perspective: 1600px;
+      background: linear-gradient(180deg, #0B0F19 0%, var(--bg) 100%);
+    }
+
+    .laptop {
+      max-width: 1040px;
+      margin: 0 auto;
+      transform-origin: 50% 100%;
+      will-change: transform;
+    }
+
+    .laptop-screen {
+      background: #1B1E27;
+      border-radius: 22px 22px 6px 6px;
+      padding: 16px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 50px 120px rgba(0, 0, 0, .55);
+    }
+
+    .laptop-base {
+      height: 18px;
+      margin: 0 -5%;
+      border-radius: 0 0 18px 18px;
+      background: linear-gradient(180deg, #C9CCD3 0%, #8E929C 60%, #5C606A 100%);
+      position: relative;
+    }
+    .laptop-base::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: 0;
+      width: 14%; height: 7px;
+      transform: translateX(-50%);
+      border-radius: 0 0 10px 10px;
+      background: rgba(0,0,0,.18);
+    }
+
+    /* Interfaz de cliente de correo */
+    .mail {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: 520px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #10141F;
+      color: #DADCE6;
+      font-size: 13px;
+    }
+
+    .mail-side {
+      background: #0C1019;
+      padding: 18px 14px;
+      border-right: 1px solid rgba(255,255,255,.05);
+    }
+
+    .mail-account { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; font-weight: 600; font-size: 12.5px; }
+    .mail-avatar { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, #00E676, #00894A); display: flex; align-items: center; justify-content: center; color: #03130A; font-weight: 700; font-size: 11px; }
+
+    .mail-folder { display: flex; justify-content: space-between; padding: 7px 10px; border-radius: 8px; color: #9AA0B4; }
+    .mail-folder.active { background: rgba(0, 230, 118, .1); color: #EDEDF3; }
+    .mail-folder .unread { font-size: 11px; color: #00E676; }
+    .mail-label { margin: 18px 10px 6px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: #5F667A; }
+
+    .mail-main { padding: 22px 28px 26px; }
+
+    .mail-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; color: #7D8499; font-size: 12px; }
+    .mail-chip { padding: 4px 10px; border-radius: 999px; background: rgba(0,230,118,.1); color: #00E676; font-weight: 600; font-size: 11px; }
+
+    .mail-title { font-size: 22px; font-weight: 600; color: #F2F3F8; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 6px; }
+    .mail-from { color: #7D8499; margin-bottom: 18px; }
+
+    .mail-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; }
+
+    .panel { background: #161B28; border: 1px solid rgba(255,255,255,.05); border-radius: 12px; padding: 14px 16px; }
+    .panel-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .panel-h b { font-weight: 600; color: #EDEDF3; font-size: 12.5px; }
+    .legend { display: flex; gap: 12px; font-size: 11px; color: #7D8499; }
+    .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+    .chart svg { width: 100%; height: auto; display: block; }
+
+    .kv { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .kv:last-child { border-bottom: 0; }
+    .kv span { color: #9AA0B4; }
+    .kv b { font-weight: 600; color: #EDEDF3; }
+    .kv .up { color: #00E676; }
+
+    .mail-text { margin-top: 14px; color: #A9AEC0; line-height: 1.65; font-size: 13px; }
+
+    /* =====================================================
+       SECCIÓN DE FUNCIONES — acordeón + panel de interfaz
+    ===================================================== */
+    .section { padding: 130px 0; position: relative; }
+
+    .features {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 64px;
+      align-items: center;
+    }
+
+    .features h2 { margin-bottom: 56px; }
+
+    .acc { border-top: 1px solid var(--line-strong); }
+
+    .acc-item { border-bottom: 1px solid var(--line); }
+
+    .acc-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      padding: 12px 0;
+      background: none;
+      border: 0;
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+      transition: color .3s var(--ease);
+    }
+    .acc-btn:hover { color: var(--fg); }
+
+    .acc-btn::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity .3s var(--ease);
+    }
+
+    .acc-item.active .acc-btn { color: var(--fg); }
+    .acc-item.active .acc-btn::before { opacity: 1; }
+
+    .acc-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .45s var(--ease);
+    }
+    .acc-item.active .acc-body { grid-template-rows: 1fr; }
+    .acc-body > div { overflow: hidden; }
+    .acc-body p { padding: 0 0 18px; color: var(--muted); line-height: 1.6; max-width: 440px; }
+
+    /* Barra de progreso del auto-avance */
+    .acc-progress { height: 2px; background: var(--line); margin: -1px 0 0; overflow: hidden; display: none; }
+    .acc-item.active .acc-progress { display: block; }
+    .acc-progress span { display: block; height: 100%; width: 0; background: var(--accent); }
+    .acc-item.active.running .acc-progress span { animation: fill var(--acc-dur, 7s) linear forwards; }
+    @keyframes fill { to { width: 100%; } }
+
+    .features .text-link { display: inline-block; margin-top: 34px; }
+
+    /* Panel derecho: se desvanece por el borde como en Mercury */
+    /* Los paneles se apilan en la misma celda: la altura se adapta al más alto */
+    .ui-stage {
+      display: grid;
+      margin-right: -12vw;
+      -webkit-mask-image: linear-gradient(90deg, #000 70%, transparent 100%);
+      mask-image: linear-gradient(90deg, #000 70%, transparent 100%);
+    }
+
+    .ui-panel {
+      grid-area: 1 / 1;
+      padding: 26px 28px;
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 40px 80px rgba(0,0,0,.35);
+      opacity: 0;
+      transform: translateY(14px) scale(.985);
+      transition: opacity .5s var(--ease), transform .5s var(--ease);
+      pointer-events: none;
+    }
+    .ui-panel.active { opacity: 1; transform: none; pointer-events: auto; }
+
+    .ui-panel h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+    .ui-panel .ui-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 20px; }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 10px;
+      border-bottom: 1px solid var(--line);
+      border-radius: 10px;
+      max-width: 520px;
+      transition: background-color .25s var(--ease);
+    }
+    .row:hover { background: var(--ghost-bg); }
+    .row .ico {
+      width: 34px; height: 34px; flex-shrink: 0;
+      border-radius: 50%;
+      border: 1px solid var(--ghost-border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .row .lbl { flex: 1; font-size: 0.92rem; }
+    .row .lbl small { display: block; font-size: 0.75rem; color: var(--muted); }
+    .row .val { font-weight: 600; font-variant-numeric: tabular-nums; font-size: 0.95rem; }
+    .row .val.neg { color: #FF8A8A; }
+    .row .val.pos { color: var(--accent); }
+    .row .val sup { font-size: .62em; opacity: .7; }
+
+    .callout {
+      margin-top: 18px;
+      max-width: 520px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(0, 230, 118, .08);
+      border: 1px solid rgba(0, 230, 118, .22);
+      font-size: 0.85rem;
+      display: flex; justify-content: space-between; gap: 12px;
+    }
+    .callout b { color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    /* Cadena de transmisión macro */
+    .chain { display: flex; flex-direction: column; gap: 0; max-width: 520px; }
+    .chain-node {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--card-2);
+      border: 1px solid var(--line);
+      font-size: 0.92rem;
+    }
+    .chain-node .ico { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,230,118,.12); color: var(--accent); font-weight: 700; font-size: .8rem; flex-shrink: 0; }
+    .chain-node .arrow { margin-left: auto; color: var(--muted); font-size: .8rem; }
+    .chain-link { width: 2px; height: 16px; margin-left: 31px; background: linear-gradient(var(--accent), transparent); opacity: .6; }
+
+    /* Checklist de criterio */
+    .check { display: flex; align-items: center; gap: 14px; padding: 14px 6px; border-bottom: 1px solid var(--line); font-size: 0.95rem; max-width: 520px; }
+    .check .box { width: 22px; height: 22px; border-radius: 7px; border: 1.5px solid var(--ghost-border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color .3s, border-color .3s; }
+    .check .box svg { width: 13px; height: 13px; stroke: var(--accent-ink); opacity: 0; transition: opacity .3s; }
+    .ui-panel.active .check .box { background: var(--accent); border-color: var(--accent); }
+    .ui-panel.active .check .box svg { opacity: 1; }
+    .ui-panel.active .check:nth-child(2) .box { transition-delay: .25s; }
+    .ui-panel.active .check:nth-child(3) .box { transition-delay: .5s; }
+    .ui-panel.active .check:nth-child(4) .box { transition-delay: .75s; }
+    .ui-panel.active .check:nth-child(5) .box { transition-delay: 1s; }
+
+    .badge { font-size: .72rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--ghost-bg); color: var(--muted); white-space: nowrap; }
+    .badge.live { background: rgba(0,230,118,.12); color: var(--accent); }
+
+    /* =====================================================
+       CITA — foto a sangre con degradado (formato testimonio)
+    ===================================================== */
+    .quote-card {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      min-height: 700px;
+      display: flex;
+      align-items: flex-end;
+      isolation: isolate;
+    }
+    .quote-card img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: 50% 60%;
+      z-index: -2;
+      transform: scale(1.06);
+      transition: transform 1.6s var(--ease);
+    }
+    .quote-card.visible img { transform: scale(1); }
+    .quote-card::after {
+      content: '';
+      position: absolute; inset: 0; z-index: -1;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.25) 55%, rgba(0,0,0,.72) 100%);
+    }
+    .quote-inner { padding: 56px; color: #F4F5F8; max-width: 780px; }
+    .quote-inner blockquote { font-size: clamp(1.6rem, 3.2vw, 2.4rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.18; margin-bottom: 22px; }
+    .quote-inner .who b { display: block; font-weight: 600; font-size: 1.05rem; }
+    .quote-inner .who span { color: rgba(244,245,248,.75); }
+
+    /* =====================================================
+       SOBRE MÍ — acordeón + ficha estilo "panel de cuentas"
+    ===================================================== */
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-top: 110px; }
+    .about h2 { margin-bottom: 48px; }
+
+    .profile {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 22px 22px 12px;
+      box-shadow: 0 30px 60px rgba(20, 22, 31, .08);
+    }
+    .profile-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 0 10px; }
+    .profile-h b { font-weight: 600; }
+    .profile .row .ico { color: var(--accent-on-light); border-color: var(--line); }
+    body[data-theme="dark"] .profile .row .ico { color: var(--accent); }
+
+    /* =====================================================
+       REJILLA 2×2 CON TARJETAS DE MEDIA (tema cálido)
+    ===================================================== */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 56px 32px; margin-top: 64px; }
+
+    .media-card .media {
+      aspect-ratio: 3 / 2;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .media-card .media svg { width: 78%; height: auto; overflow: visible; }
+    .media-card h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: 6px; }
+    .media-card p { color: var(--muted); line-height: 1.55; max-width: 460px; }
+
+    .tint-1 { background: #E9EEF0; }
+    .tint-2 { background: #F0EAE6; }
+    .tint-3 { background: #ECE8F1; }
+    .tint-4 { background: #E6EEE9; }
+
+    .draw { stroke-dasharray: 900; stroke-dashoffset: 900; transition: stroke-dashoffset 2.2s var(--ease) .2s; }
+    .media-card.visible .draw { stroke-dashoffset: 0; }
+    .grow { transform-box: fill-box; transform-origin: bottom; transform: scaleY(0); transition: transform 1s var(--ease); }
+    .media-card.visible .grow { transform: scaleY(1); }
+    .media-card.visible .grow:nth-of-type(2) { transition-delay: .12s; }
+    .media-card.visible .grow:nth-of-type(3) { transition-delay: .24s; }
+    .media-card.visible .grow:nth-of-type(4) { transition-delay: .36s; }
+    .media-card.visible .grow:nth-of-type(5) { transition-delay: .48s; }
+
+    /* =====================================================
+       CIFRAS — fila con divisores verticales
+    ===================================================== */
+    .stats-head { text-align: center; max-width: 680px; margin: 0 auto 72px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .stat { text-align: center; padding: 6px 18px; border-left: 1px solid var(--line); }
+    .stat:first-child { border-left: 0; }
+    .stat-num { font-size: clamp(2.6rem, 5vw, 4rem); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+    .stat-lbl { margin-top: 10px; color: var(--muted); }
+
+    /* =====================================================
+       EN EL FOCO — tarjetas de artículos
+    ===================================================== */
+    .spot-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-top: 40px; border-top: 1px solid var(--line); margin-bottom: 40px; }
+    .spot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+    .spot {
+      display: flex; flex-direction: column;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .35s var(--ease), border-color .35s var(--ease);
+    }
+    a.spot:hover { transform: translateY(-4px); border-color: rgba(0, 230, 118, .35); }
+    a.spot:hover .round-arrow { background: var(--accent); color: var(--accent-ink); transform: translateX(3px); }
+
+    .spot .thumb { aspect-ratio: 16 / 10; border-radius: 12px; margin-bottom: 24px; overflow: hidden; position: relative; }
+    .spot .thumb svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .spot .meta { font-size: .8rem; color: var(--muted); margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
+    .spot h3 { font-size: 1.45rem; font-weight: 500; letter-spacing: -0.015em; line-height: 1.2; margin-bottom: 28px; }
+    .spot .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+    .spot.soon { opacity: .6; }
+
+    /* =====================================================
+       CTA FINAL + DOS TARJETAS
+    ===================================================== */
+    .final { text-align: center; }
+    .final h2 { margin-bottom: 30px; }
+    .final .email-pill { margin: 0 auto; background: var(--ghost-bg); border-color: var(--ghost-border); color: var(--fg); }
+    .final .email-pill input::placeholder { color: var(--muted); }
+    .final .consent { color: var(--muted); }
+
+    .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 80px; text-align: left; }
+    .duo-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 32px; }
+    .duo-card h3 { font-size: 1.6rem; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 10px; }
+    .duo-card p { color: var(--muted); line-height: 1.6; margin-bottom: 28px; max-width: 420px; }
+
+    /* =====================================================
+       FOOTER — columnas + notas legales numeradas
+    ===================================================== */
+    footer { padding: 60px 0 80px; }
+    .foot-cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
+    .foot-cols h4 { font-weight: 400; color: var(--muted); font-size: .95rem; margin-bottom: 14px; }
+    .foot-cols ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .foot-cols a { text-decoration: none; }
+    .foot-cols a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .foot-brand p { color: var(--muted); margin-top: 14px; max-width: 280px; line-height: 1.6; font-size: .92rem; }
+
+    .legal { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; margin-top: 90px; padding-top: 36px; border-top: 1px solid var(--line-strong); font-size: .8rem; line-height: 1.65; }
+    .legal ol { padding-left: 18px; display: flex; flex-direction: column; gap: 14px; color: var(--muted); }
+    .legal ol li::marker { color: var(--fg); }
+    .legal .copy { margin-top: 36px; color: var(--muted); }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+    @media (max-width: 960px) {
+      .nav-links, .nav-right .plain, .nav-right .btn { display: none; }
+      .nav-toggle { display: inline-flex; }
+      .nav-inner { padding: 0 16px 0 24px; }
+
+      .features, .about { grid-template-columns: 1fr; gap: 48px; }
+      .ui-stage { margin-right: 0; -webkit-mask-image: none; mask-image: none; }
+      .ui-panel { padding: 22px 18px; }
+      .acc-btn::before { left: -14px; }
+      .about { margin-top: 80px; }
+
+      .mail { grid-template-columns: 1fr; }
+      .mail-side { display: none; }
+      .mail-grid { grid-template-columns: 1fr; }
+
+      .spot-grid { grid-template-columns: 1fr; }
+      .foot-cols { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .section { padding: 96px 0; }
+      .grid2, .duo { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+      .stat:nth-child(3) { border-left: 0; }
+      /* En móvil la cita va debajo de la foto para no tapar la cara */
+      .quote-card { display: block; min-height: 0; background: #0B0F19; }
+      .quote-card img { position: relative; height: auto; aspect-ratio: 4 / 5; object-position: 50% 40%; }
+      .quote-card::after { display: none; }
+      .quote-inner { padding: 26px 24px 30px; }
+      .quote-inner blockquote { font-size: 1.45rem; }
+      .legal { grid-template-columns: 1fr; }
+      .btn { height: 48px; }
+      .hero-content { padding-top: 120px; }
+      .hero-note { font-size: .74rem; }
+      .device-stage { padding-bottom: 96px; }
+      .laptop-screen { padding: 8px; border-radius: 14px 14px 4px 4px; }
+      .mail-main { padding: 18px 16px; }
+      .mail-title { font-size: 18px; }
+      .spot-head { flex-direction: column; align-items: start; }
+    }
+
+    @media (max-width: 520px) {
+      .email-pill { height: auto; flex-direction: column; border-radius: 24px; padding: 6px; gap: 6px; }
+      .email-pill input { height: 48px; width: 100%; text-align: center; }
+      .email-pill .btn { width: 100%; height: 48px; }
+      .hero .btn-ghost { width: 100%; height: 48px; }
+      .foot-cols { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+      .price-line { stroke-dashoffset: 0; }
+      .last-price { opacity: 1; }
+      .draw { stroke-dashoffset: 0; }
+      .grow { transform: none; }
+    }
+  </style>
+</head>
+
+<body data-theme="dark">
+
+  <!-- =====================================================
+       NAVBAR
+  ===================================================== -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#inicio" class="brand" aria-label="@eduinvest, inicio">
+        <span class="brand-mark" aria-hidden="true">@</span>eduinvest
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links">
+          <li><a href="#newsletter">La Newsletter</a></li>
+          <li><a href="#filosofia">Filosofía</a></li>
+          <li><a href="#sobre-mi">Sobre mí</a></li>
+          <li><a href="#articulos">Artículos</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-right">
+        <a href="#articulos" class="plain">Leer la #01</a>
+        <a href="#suscribirse" class="btn btn-primary">Suscribirme</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navMobile">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <nav class="nav-mobile" id="navMobile" aria-label="Menú móvil">
+      <a href="#newsletter">La Newsletter</a>
+      <a href="#filosofia">Filosofía</a>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#articulos">Artículos</a>
+      <a href="#suscribirse" class="btn btn-primary">Suscribirme</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- =====================================================
+         HERO — paisaje cinematográfico
+    ===================================================== -->
+    <section class="hero" id="inicio" data-theme="dark" aria-labelledby="hero-title">
+      <div class="mist m1" aria-hidden="true"></div>
+      <div class="mist m2" aria-hidden="true"></div>
+      <div class="mist m3" aria-hidden="true"></div>
+
+      <!-- Las montañas son gráficos de mercado -->
+      <svg class="hero-landscape" viewBox="0 0 1440 620" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="gFar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3B4D72" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#16213A" stop-opacity=".2"/>
+          </linearGradient>
+          <linearGradient id="gMid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1D2B45"/>
+            <stop offset="1" stop-color="#0E1424"/>
+          </linearGradient>
+          <linearGradient id="gNear" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0F1A22"/>
+            <stop offset=".35" stop-color="#0B0F19"/>
+          </linearGradient>
+          <filter id="soft"><feGaussianBlur stdDeviation="2.5"/></filter>
+          <filter id="glow" x="-5%" y="-50%" width="110%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <path filter="url(#soft)" fill="url(#gFar)" d="M-20 291 L20 291.5 L60 288.1 L100 280.3 L140 278.3 L180 277.5 L220 273.8 L260 275.6 L300 281.7 L340 287.2 L380 294.7 L420 302.8 L460 314.6 L500 318.6 L540 319 L580 322.4 L620 328.1 L660 323.8 L700 323 L740 321.2 L780 326.7 L820 335.8 L860 335.2 L900 334.1 L940 340 L980 347 L1020 354 L1060 359.7 L1100 370.3 L1140 384.5 L1180 391.8 L1220 392.8 L1260 397.9 L1300 397.1 L1340 388.4 L1380 376.2 L1420 363.8 L1460 349 L1460 620 L-20 620 Z"/>
+        <path fill="url(#gMid)" d="M-20 427 L8 432.2 L36 438.7 L64 448.4 L92 446.8 L120 441.2 L148 437.9 L176 435.2 L204 431.6 L232 423.7 L260 424.8 L288 417.9 L316 410.9 L344 403.8 L372 401.7 L400 407.2 L428 410.7 L456 407.4 L484 403.4 L512 397.3 L540 391.1 L568 385.9 L596 380.1 L624 377.1 L652 377.3 L680 373.5 L708 377.8 L736 380.2 L764 387.6 L792 394.5 L820 400.9 L848 404.7 L876 406.8 L904 410.4 L932 419.1 L960 422 L988 426.1 L1016 423.6 L1044 422.2 L1072 417.7 L1100 411 L1128 404 L1156 403.3 L1184 408.2 L1212 404.1 L1240 405.6 L1268 398.9 L1296 392.3 L1324 381.7 L1352 367.7 L1380 366.5 L1408 361 L1436 359.6 L1464 352.9 L1464 620 L-20 620 Z"/>
+        <path fill="url(#gNear)" d="M-20 499.5 L-2 500.2 L16 496.3 L34 498.7 L52 503.9 L70 510.2 L88 516.7 L106 523.3 L124 527.9 L142 526.1 L160 517.9 L178 509.5 L196 499.3 L214 487.5 L232 482.2 L250 476 L268 475.1 L286 474 L304 475.1 L322 472.1 L340 474.2 L358 471.7 L376 468.3 L394 470.2 L412 466.2 L430 463.3 L448 455.7 L466 455.8 L484 456.8 L502 461.3 L520 457.3 L538 458.8 L556 455.2 L574 457.6 L592 458.4 L610 459.6 L628 456.3 L646 450.3 L664 442.9 L682 438.9 L700 431.1 L718 429.5 L736 430.1 L754 432.1 L772 432.1 L790 425.9 L808 417.7 L826 417.5 L844 412.6 L862 411.6 L880 414.8 L898 410.5 L916 411.8 L934 415.5 L952 421.8 L970 428.5 L988 433.2 L1006 432.7 L1024 427.7 L1042 425.8 L1060 427.1 L1078 424.6 L1096 418.5 L1114 412.5 L1132 411.9 L1150 410.6 L1168 406.4 L1186 404 L1204 403.6 L1222 399.8 L1240 398.7 L1258 395.5 L1276 388.9 L1294 381.9 L1312 382.4 L1330 386.6 L1348 388.5 L1366 391.7 L1384 395.9 L1402 392.5 L1420 390.2 L1438 382.8 L1456 377.1 L1456 620 L-20 620 Z"/>
+        <path class="price-line" filter="url(#glow)" fill="none" stroke="#00E676" stroke-width="2" stroke-linejoin="round" d="M-20 499.5 L-2 500.2 L16 496.3 L34 498.7 L52 503.9 L70 510.2 L88 516.7 L106 523.3 L124 527.9 L142 526.1 L160 517.9 L178 509.5 L196 499.3 L214 487.5 L232 482.2 L250 476 L268 475.1 L286 474 L304 475.1 L322 472.1 L340 474.2 L358 471.7 L376 468.3 L394 470.2 L412 466.2 L430 463.3 L448 455.7 L466 455.8 L484 456.8 L502 461.3 L520 457.3 L538 458.8 L556 455.2 L574 457.6 L592 458.4 L610 459.6 L628 456.3 L646 450.3 L664 442.9 L682 438.9 L700 431.1 L718 429.5 L736 430.1 L754 432.1 L772 432.1 L790 425.9 L808 417.7 L826 417.5 L844 412.6 L862 411.6 L880 414.8 L898 410.5 L916 411.8 L934 415.5 L952 421.8 L970 428.5 L988 433.2 L1006 432.7 L1024 427.7 L1042 425.8 L1060 427.1 L1078 424.6 L1096 418.5 L1114 412.5 L1132 411.9 L1150 410.6 L1168 406.4 L1186 404 L1204 403.6 L1222 399.8 L1240 398.7 L1258 395.5 L1276 388.9 L1294 381.9 L1312 382.4 L1330 386.6 L1348 388.5 L1366 391.7 L1384 395.9 L1402 392.5 L1420 390.2 L1438 382.8"/>
+        <g class="last-price">
+          <circle class="pulse" cx="1438" cy="382.8" r="6" fill="#00E676"/>
+          <circle cx="1438" cy="382.8" r="4.5" fill="#00E676"/>
+        </g>
+      </svg>
+
+      <div class="hero-content">
+        <h1 id="hero-title">Lo que la banca te oculta, explicado en negro sobre blanco.</h1>
+        <p class="hero-sub">Análisis de mercados, macroeconomía y finanzas sin rodeos. Una newsletter cada lunes para quienes buscan el control total de su capital.</p>
+
+        <form class="js-subscribe" id="suscribirse" novalidate aria-label="Suscripción a La Letra Pequeña">
+          <div class="hero-actions">
+            <div class="email-pill">
+              <label for="heroEmail" class="sr-only">Tu email principal</label>
+              <input id="heroEmail" type="email" name="email" placeholder="Introduce tu email principal" autocomplete="email" required />
+              <button type="submit" class="btn btn-primary">Suscribirme</button>
+            </div>
+            <a href="#newsletter" class="btn btn-ghost">Ver una edición</a>
+          </div>
+          <label class="consent">
+            <input type="checkbox" name="privacy" required />
+            <span>Acepto la <a href="index.html#footer">política de privacidad</a></span>
+          </label>
+          <p class="form-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <p class="hero-note">Contenido exclusivamente educativo. No constituye asesoramiento financiero.<sup>1</sup></p>
+    </section>
+
+
+    <!-- =====================================================
+         MAQUETA — la newsletter dentro de un portátil
+    ===================================================== -->
+    <section class="device-stage" id="newsletter" data-theme="dark" aria-label="Vista previa de La Letra Pequeña">
+      <div class="laptop" id="laptop">
+        <div class="laptop-screen">
+          <div class="mail" role="img" aria-label="Edición #01 de La Letra Pequeña abierta en un cliente de correo">
+            <aside class="mail-side" aria-hidden="true">
+              <div class="mail-account"><span class="mail-avatar">ei</span>Tu bandeja</div>
+              <div class="mail-folder active">Recibidos <span class="unread">1</span></div>
+              <div class="mail-folder">Destacados</div>
+              <div class="mail-folder">Enviados</div>
+              <div class="mail-label">Etiquetas</div>
+              <div class="mail-folder">La Letra Pequeña</div>
+              <div class="mail-folder">Macro</div>
+              <div class="mail-folder">Lecturas</div>
+            </aside>
+
+            <div class="mail-main" aria-hidden="true">
+              <div class="mail-top"><span>Lunes · 8:00</span><span class="mail-chip">Edición #01</span></div>
+              <div class="mail-title">Por qué el oro no es solo un activo refugio</div>
+              <div class="mail-from">@eduinvest · La Letra Pequeña · 8 min de lectura</div>
+
+              <div class="mail-grid">
+                <div class="panel chart">
+                  <div class="panel-h">
+                    <b>Oro vs. tipos de interés reales</b>
+                    <span class="legend"><span><i style="background:#00E676"></i>Oro</span><span><i style="background:#8C93FF"></i>Tipos reales</span></span>
+                  </div>
+                  <svg viewBox="0 0 520 160" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#00E676" stop-opacity=".28"/>
+                        <stop offset="1" stop-color="#00E676" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <g stroke="rgba(255,255,255,.06)"><line x1="0" y1="40" x2="520" y2="40"/><line x1="0" y1="80" x2="520" y2="80"/><line x1="0" y1="120" x2="520" y2="120"/></g>
+                    <path fill="url(#gGold)" d="M0 116.5 L13 115 L26 115.9 L39 114.5 L52 112.7 L65 109.5 L78 111.2 L91 111.7 L104 111.6 L117 109.3 L130 105 L143 104.7 L156 106.8 L169 106.7 L182 104.1 L195 100.3 L208 95.6 L221 91.6 L234 86.4 L247 85.7 L260 85.1 L273 86.7 L286 88.3 L299 85.2 L312 83.2 L325 78.8 L338 78.6 L351 77.3 L364 75.7 L377 73.6 L390 69.9 L403 63.9 L416 57 L429 56.8 L442 59 L455 61.2 L468 61.7 L481 62.8 L494 62.9 L507 60.5 L520 57.3 L520 160 L0 160 Z"/>
+                    <path fill="none" stroke="#00E676" stroke-width="2" vector-effect="non-scaling-stroke" d="M0 116.5 L13 115 L26 115.9 L39 114.5 L52 112.7 L65 109.5 L78 111.2 L91 111.7 L104 111.6 L117 109.3 L130 105 L143 104.7 L156 106.8 L169 106.7 L182 104.1 L195 100.3 L208 95.6 L221 91.6 L234 86.4 L247 85.7 L260 85.1 L273 86.7 L286 88.3 L299 85.2 L312 83.2 L325 78.8 L338 78.6 L351 77.3 L364 75.7 L377 73.6 L390 69.9 L403 63.9 L416 57 L429 56.8 L442 59 L455 61.2 L468 61.7 L481 62.8 L494 62.9 L507 60.5 L520 57.3"/>
+                    <path fill="none" stroke="#8C93FF" stroke-width="1.6" stroke-dasharray="4 4" vector-effect="non-scaling-stroke" d="M0 30.2 L13 32.9 L26 36.1 L39 33.6 L52 31 L65 40.9 L78 34 L91 37.7 L104 36 L117 36.4 L130 38.9 L143 52.1 L156 43.8 L169 37.5 L182 52.8 L195 48.8 L208 57.2 L221 54 L234 64.2 L247 71.2 L260 60.6 L273 65.9 L286 60.3 L299 63.9 L312 70.3 L325 66.7 L338 75.8 L351 77 L364 68.7 L377 69.8 L390 75 L403 88 L416 91.3 L429 89.7 L442 91.1 L455 89.1 L468 82.7 L481 94 L494 85 L507 93.3 L520 89.4"/>
+                  </svg>
+                </div>
+
+                <div class="panel">
+                  <div class="panel-h"><b>En esta edición</b></div>
+                  <div class="kv"><span>Tipos reales</span><b>Motor principal</b></div>
+                  <div class="kv"><span>Bancos centrales</span><b class="up">Compradores netos</b></div>
+                  <div class="kv"><span>Demanda industrial</span><b>Suelo estructural</b></div>
+                  <div class="kv"><span>Ciclos de mercado</span><b>Estanflación ✦</b></div>
+                </div>
+              </div>
+
+              <p class="mail-text">Cuando los mercados tiemblan, la narrativa es siempre la misma: «el oro sube porque los inversores buscan refugio». Es cierto. Pero es una verdad tan parcial que, tomada como única explicación, puede llevarte a decisiones erróneas…</p>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base" aria-hidden="true"></div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         FILOSOFÍA — acordeón + panel de interfaz
+    ===================================================== -->
+    <section class="section" id="filosofia" data-theme="dark" aria-labelledby="feat-title">
+      <div class="wrap">
+        <div class="features">
+
+          <div class="reveal">
+            <h2 class="display" id="feat-title">Todo lo que necesitas para entender el dinero.<br><span class="muted">En un solo email.</span></h2>
+
+            <div class="acc" id="acc" role="tablist" aria-orientation="vertical">
+              <div class="acc-item active">
+                <button class="acc-btn" role="tab" aria-selected="true" aria-controls="panel-0" id="tab-0">Transparencia radical</button>
+                <div class="acc-body"><div><p>Destripamos comisiones ocultas, productos trampa de la banca tradicional y sesgos del mercado. Con números, no con adjetivos.</p></div></div>
+                <div class="acc-progress"><span></span></div>
+              </div>
+              <div class="acc-item">
+                <button class="acc-btn" role="tab" aria-selected="false" aria-controls="panel-1" id="tab-1">Macroeconomía y contexto real</button>
+                <div class="acc-body"><div><p>Conectamos las decisiones de los bancos centrales —tipos, inflación, política monetaria— con lo que pasa en tu cartera.</p></div></div>
+                <div class="acc-progress"><span></span></div>
+              </div>
+              <div class="acc-item">
+                <button class="acc-btn" role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2">Criterio y autodidactismo</button>
+                <div class="acc-body"><div><p>Herramientas de análisis técnico y fundamental para que decidas por ti mismo, con disciplina, en lugar de seguir recomendaciones ajenas.</p></div></div>
+                <div class="acc-progress"><span></span></div>
+              </div>
+              <div class="acc-item">
+                <button class="acc-btn" role="tab" aria-selected="false" aria-controls="panel-3" id="tab-3">Un archivo que crece cada semana</button>
+                <div class="acc-body"><div><p>Cada edición se queda publicada. Un tema por semana, explicado de principio a fin.</p></div></div>
+                <div class="acc-progress"><span></span></div>
+              </div>
+            </div>
+
+            <a href="#articulos" class="text-link">Ver el archivo</a>
+          </div>
+
+          <div class="ui-stage reveal">
+
+            <!-- Panel 0: coste real de un fondo -->
+            <div class="ui-panel th active" id="panel-0" role="tabpanel" aria-labelledby="tab-0">
+              <h3>Lo que cuesta la letra pequeña</h3>
+              <p class="ui-sub">Ejemplo ilustrativo: 10.000 € durante 20 años al 6 % bruto anual</p>
+              <div class="row"><span class="ico">0,2</span><span class="lbl">Fondo indexado<small>Gastos corrientes 0,20 %</small></span><span class="val pos">30.881 €</span></div>
+              <div class="row"><span class="ico">1,9</span><span class="lbl">Fondo de banca tradicional<small>Gastos corrientes 1,85 %</small></span><span class="val">22.553 €</span></div>
+              <div class="row"><span class="ico">—</span><span class="lbl">Diferencia por comisiones<small>Mismo mercado, mismo riesgo</small></span><span class="val neg">−8.328 €</span></div>
+              <div class="callout"><span>Frente al indexado, de cada 100 € de ganancia pierdes</span><b>≈ 40 €</b></div>
+            </div>
+
+            <!-- Panel 1: cadena de transmisión macro -->
+            <div class="ui-panel th" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+              <h3>Cómo llega una decisión del BCE a tu cartera</h3>
+              <p class="ui-sub">La cadena que explicamos en cada edición</p>
+              <div class="chain">
+                <div class="chain-node"><span class="ico">1</span>El banco central sube los tipos<span class="arrow">BCE · Fed</span></div>
+                <div class="chain-link"></div>
+                <div class="chain-node"><span class="ico">2</span>El crédito se encarece<span class="arrow">hipotecas · empresas</span></div>
+                <div class="chain-link"></div>
+                <div class="chain-node"><span class="ico">3</span>Los bonos ofrecen más rentabilidad<span class="arrow">coste de oportunidad</span></div>
+                <div class="chain-link"></div>
+                <div class="chain-node"><span class="ico">4</span>Las valoraciones se ajustan<span class="arrow">acciones · oro</span></div>
+              </div>
+            </div>
+
+            <!-- Panel 2: checklist de criterio -->
+            <div class="ui-panel th" id="panel-2" role="tabpanel" aria-labelledby="tab-2">
+              <h3>Antes de invertir, pregúntate</h3>
+              <p class="ui-sub">El método que practicamos en cada análisis</p>
+              <div>
+                <div class="check"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>¿Entiendo cómo gana dinero este activo?</div>
+                <div class="check"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>¿Cuánto me cuesta realmente, todo incluido?</div>
+                <div class="check"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>¿Qué hago si cae un 30 % mañana?</div>
+                <div class="check"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>¿Quién gana si yo compro?</div>
+                <div class="check"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>¿Encaja en mi plan, o es solo ruido?</div>
+              </div>
+            </div>
+
+            <!-- Panel 3: archivo de ediciones -->
+            <div class="ui-panel th" id="panel-3" role="tabpanel" aria-labelledby="tab-3">
+              <h3>Archivo de La Letra Pequeña</h3>
+              <p class="ui-sub">Un tema por semana</p>
+              <div class="row"><span class="ico">01</span><span class="lbl">Por qué el oro no es solo un activo refugio<small>Activos alternativos</small></span><span class="badge live">Disponible</span></div>
+              <div class="row"><span class="ico">02</span><span class="lbl">La ilusión del depósito bancario<small>Inflación · Ahorro</small></span><span class="badge">Próximamente</span></div>
+              <div class="row"><span class="ico">03</span><span class="lbl">Curva de tipos invertida<small>Renta fija · Ciclo</small></span><span class="badge">Próximamente</span></div>
+              <div class="row"><span class="ico">+</span><span class="lbl muted">Una nueva edición cada lunes</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         SOBRE MÍ — cita con foto (tema claro)
+    ===================================================== -->
+    <section class="section" id="sobre-mi" data-theme="light" aria-labelledby="about-title">
+      <div class="wrap">
+
+        <figure class="quote-card reveal">
+          <img src="IMAGEN%20EDU%20TRADING.png" alt="Edu, fundador de @eduinvest, en su escritorio con gráficos de mercado" loading="lazy" />
+          <figcaption class="quote-inner">
+            <blockquote>«No te enseño a invertir. Te enseño a ver lo que el sistema no quiere que veas.»</blockquote>
+            <div class="who"><b>Edu</b><span>Fundador de @eduinvest y La Letra Pequeña</span></div>
+          </figcaption>
+        </figure>
+
+        <div class="about">
+          <div class="reveal">
+            <h2 class="display" id="about-title">Un aprendiz en construcción.<br><span class="muted">Y eso es lo que me hace diferente.</span></h2>
+
+            <div class="acc acc-static">
+              <div class="acc-item active">
+                <button class="acc-btn" aria-expanded="true">El propósito</button>
+                <div class="acc-body"><div><p>Estoy aquí para descubrir contigo cómo se mueve realmente este mundo financiero. No soy un gurú ni un experto de traje. Soy alguien que va un paso por delante y te lleva de la mano mientras lo descubre.</p></div></div>
+              </div>
+              <div class="acc-item">
+                <button class="acc-btn" aria-expanded="false">Quién soy</button>
+                <div class="acc-body"><div><p>Tengo 21 años, me he graduado en ADE y llevo 2-3 años apasionado por los mercados financieros. Soy fundador de EduInvest y la newsletter «La Letra Pequeña». Gestiono mi cartera propia y la familiar, y mi objetivo es claro: acabar en una gestora de fondos y llevar carteras de forma independiente. Soy un aprendiz en construcción, y eso es precisamente lo que me hace diferente.</p></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile th reveal" aria-label="Perfil del autor">
+            <div class="profile-h"><b>Perfil</b><span class="badge live">@eduinvest</span></div>
+            <div class="row"><span class="ico">21</span><span class="lbl">Edad<small>Fundador de EduInvest</small></span><span class="val">21 años</span></div>
+            <div class="row"><span class="ico">ADE</span><span class="lbl">Formación<small>Administración y Dirección de Empresas</small></span><span class="val">Graduado</span></div>
+            <div class="row"><span class="ico">2–3</span><span class="lbl">En los mercados<small>Aprendizaje autodidacta y riguroso</small></span><span class="val">2–3 años</span></div>
+            <div class="row"><span class="ico">€</span><span class="lbl">Gestión<small>Cartera propia y familiar</small></span><span class="val">Activa</span></div>
+            <div class="row" style="border-bottom:0"><span class="ico">→</span><span class="lbl">Objetivo<small>Llevar carteras de forma independiente</small></span><span class="val">Gestora de fondos</span></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         QUÉ APRENDERÁS — rejilla 2×2 (tema cálido)
+    ===================================================== -->
+    <section class="section" data-theme="warm" aria-labelledby="learn-title">
+      <div class="wrap">
+        <h2 class="display reveal" id="learn-title">Aprende a leer el mercado.<br><span class="muted">No a adivinarlo.</span></h2>
+
+        <div class="grid2">
+          <article class="media-card reveal">
+            <div class="media tint-1" aria-hidden="true">
+              <svg viewBox="0 0 300 180">
+                <g stroke="#17181C" stroke-opacity=".08"><line x1="0" y1="40" x2="300" y2="40"/><line x1="0" y1="90" x2="300" y2="90"/><line x1="0" y1="140" x2="300" y2="140"/></g>
+                <path class="draw" fill="none" stroke="#00894A" stroke-width="3" stroke-linejoin="round" d="M0 150 H50 V150 H80 V128 H110 V104 H140 V80 H170 V62 H210 V62 H240 V78 H270 V96 H300"/>
+                <text x="0" y="172" font-size="11" fill="#5E5F66" font-family="Plus Jakarta Sans, sans-serif">Tipo oficial del banco central</text>
+              </svg>
+            </div>
+            <h3>Las decisiones de los bancos centrales</h3>
+            <p>Qué significa realmente una subida de tipos y por qué mueve todo lo demás.</p>
+          </article>
+
+          <article class="media-card reveal">
+            <div class="media tint-2" aria-hidden="true">
+              <svg viewBox="0 0 300 180">
+                <rect class="grow" x="20" y="40" width="44" height="120" rx="6" fill="#17181C" fill-opacity=".85"/>
+                <rect class="grow" x="84" y="58" width="44" height="102" rx="6" fill="#17181C" fill-opacity=".7"/>
+                <rect class="grow" x="148" y="76" width="44" height="84" rx="6" fill="#17181C" fill-opacity=".55"/>
+                <rect class="grow" x="212" y="96" width="44" height="64" rx="6" fill="#C2410C" fill-opacity=".7"/>
+                <text x="20" y="176" font-size="11" fill="#5E5F66" font-family="Plus Jakarta Sans, sans-serif">Tu rentabilidad, comisión a comisión</text>
+              </svg>
+            </div>
+            <h3>Las comisiones que no ves</h3>
+            <p>Gastos corrientes, de custodia, de cambio. Cómo se suman y cuánto te cuestan a 20 años.</p>
+          </article>
+
+          <article class="media-card reveal">
+            <div class="media tint-3" aria-hidden="true">
+              <svg viewBox="0 0 300 180">
+                <path class="draw" fill="none" stroke="#4F46E5" stroke-width="3" stroke-linecap="round" d="M0 110 C 40 40, 80 40, 110 90 S 180 160, 220 100 S 280 30, 300 60"/>
+                <g font-size="10.5" fill="#5E5F66" font-family="Plus Jakarta Sans, sans-serif">
+                  <text x="22" y="40">Expansión</text><text x="122" y="64">Desaceleración</text><text x="136" y="160">Recesión</text><text x="196" y="40">Recuperación</text>
+                </g>
+              </svg>
+            </div>
+            <h3>Los ciclos de mercado</h3>
+            <p>Expansión, desaceleración, recesión y recuperación. Qué activos suelen comportarse mejor en cada fase.</p>
+          </article>
+
+          <article class="media-card reveal">
+            <div class="media tint-4" aria-hidden="true">
+              <svg viewBox="0 0 300 180">
+                <g font-size="11" fill="#17181C" font-family="Plus Jakarta Sans, sans-serif">
+                  <text x="10" y="34">Ingresos</text><text x="10" y="74">Margen operativo</text><text x="10" y="114">Deuda neta / EBITDA</text><text x="10" y="154">Flujo de caja libre</text>
+                </g>
+                <rect class="grow" x="150" y="22" width="130" height="16" rx="8" fill="#00894A" fill-opacity=".85" style="transform-origin:left;"/>
+                <rect class="grow" x="150" y="62" width="88" height="16" rx="8" fill="#00894A" fill-opacity=".6" style="transform-origin:left;"/>
+                <rect class="grow" x="150" y="102" width="52" height="16" rx="8" fill="#17181C" fill-opacity=".45" style="transform-origin:left;"/>
+                <rect class="grow" x="150" y="142" width="110" height="16" rx="8" fill="#00894A" fill-opacity=".75" style="transform-origin:left;"/>
+              </svg>
+            </div>
+            <h3>Los números de una empresa</h3>
+            <p>Análisis fundamental sin jerga: las cuatro cifras que de verdad importan antes de comprar una acción.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         CIFRAS
+    ===================================================== -->
+    <section class="section" data-theme="dark" aria-labelledby="stats-title">
+      <div class="wrap">
+        <h2 class="display stats-head reveal" id="stats-title">Educación financiera sin conflictos de interés. Así de simple.</h2>
+        <div class="stats reveal">
+          <div class="stat"><div class="stat-num"><span class="count" data-to="0">0</span> €</div><div class="stat-lbl">Coste de suscripción</div></div>
+          <div class="stat"><div class="stat-num"><span class="count" data-to="1">1</span></div><div class="stat-lbl">Edición cada lunes</div></div>
+          <div class="stat"><div class="stat-num"><span class="count" data-to="0">0</span></div><div class="stat-lbl">Afiliados ni productos que venderte</div></div>
+          <div class="stat"><div class="stat-num"><span class="count" data-to="100">100</span> %</div><div class="stat-lbl">Independiente</div></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         EN EL FOCO — artículos
+    ===================================================== -->
+    <section class="section" id="articulos" data-theme="dark" style="padding-top:0" aria-labelledby="spot-title">
+      <div class="wrap">
+        <div class="spot-head reveal">
+          <h2 class="display" id="spot-title">La Letra Pequeña, en el foco</h2>
+          <a href="index.html#articulos" class="text-link">Ver todo el archivo</a>
+        </div>
+
+        <div class="spot-grid">
+          <a class="spot reveal" href="index.html#articulos">
+            <div class="thumb" style="background:linear-gradient(135deg,#2A2416,#141824)" aria-hidden="true">
+              <svg viewBox="0 0 320 200" preserveAspectRatio="none">
+                <circle cx="230" cy="70" r="90" fill="#E8B54A" fill-opacity=".18"/>
+                <path fill="none" stroke="#E8B54A" stroke-width="2.5" d="M0 160 L40 150 L80 156 L120 130 L160 120 L200 96 L240 100 L280 70 L320 54"/>
+              </svg>
+            </div>
+            <div class="meta"><span class="badge live">Edición #01</span>Activos alternativos</div>
+            <h3>Por qué el oro no es solo un activo refugio</h3>
+            <div class="foot"><span class="muted">8 min</span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+          </a>
+
+          <div class="spot soon reveal">
+            <div class="thumb" style="background:linear-gradient(135deg,#1A2236,#141824)" aria-hidden="true">
+              <svg viewBox="0 0 320 200" preserveAspectRatio="none">
+                <path fill="none" stroke="#8C93FF" stroke-width="2.5" d="M0 60 L60 70 L120 84 L180 102 L240 124 L320 150"/>
+                <path fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="5 5" d="M0 120 L320 120"/>
+              </svg>
+            </div>
+            <div class="meta"><span class="badge">Próximamente</span>Inflación · Ahorro</div>
+            <h3>La ilusión del depósito bancario</h3>
+            <div class="foot"><span class="muted">Edición #02</span></div>
+          </div>
+
+          <div class="spot soon reveal">
+            <div class="thumb" style="background:linear-gradient(135deg,#12261F,#141824)" aria-hidden="true">
+              <svg viewBox="0 0 320 200" preserveAspectRatio="none">
+                <path fill="none" stroke="#00E676" stroke-width="2.5" d="M0 70 C 80 60, 140 60, 180 90 S 260 140, 320 150"/>
+              </svg>
+            </div>
+            <div class="meta"><span class="badge">Próximamente</span>Renta fija · Ciclo</div>
+            <h3>Curva de tipos invertida: el indicador que casi siempre acierta</h3>
+            <div class="foot"><span class="muted">Edición #03</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         CTA FINAL
+    ===================================================== -->
+    <section class="section final" data-theme="dark" style="padding-top:40px" aria-labelledby="final-title">
+      <div class="wrap">
+        <h2 class="display reveal" id="final-title">La realidad financiera,<br>cada lunes en tu bandeja.</h2>
+
+        <form class="js-subscribe reveal" novalidate aria-label="Suscripción a La Letra Pequeña">
+          <div class="email-pill th">
+            <label for="finalEmail" class="sr-only">Tu email principal</label>
+            <input id="finalEmail" type="email" name="email" placeholder="Introduce tu email principal" autocomplete="email" required />
+            <button type="submit" class="btn btn-primary">Unirme</button>
+          </div>
+          <label class="consent">
+            <input type="checkbox" name="privacy" required />
+            <span>Acepto la <a href="index.html#footer">política de privacidad</a></span>
+          </label>
+          <p class="form-msg" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="duo">
+          <div class="duo-card th reveal">
+            <h3>La Letra Pequeña</h3>
+            <p>Un análisis por semana sobre mercados, macroeconomía y finanzas personales. Gratis y sin publicidad.</p>
+            <a href="#newsletter" class="btn btn-ghost">Ver una edición <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
+          </div>
+          <div class="duo-card th reveal">
+            <h3>Sobre @eduinvest</h3>
+            <p>Un proyecto independiente de educación financiera. Sin traje, sin gurús y sin letra pequeña.</p>
+            <a href="#sobre-mi" class="btn btn-ghost">Conocer al autor</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+  ===================================================== -->
+  <footer data-theme="dark">
+    <div class="wrap">
+      <div class="foot-cols">
+        <div class="foot-brand">
+          <a href="#inicio" class="brand"><span class="brand-mark" aria-hidden="true">@</span>eduinvest</a>
+          <p>Educación financiera independiente para quienes quieren entender de verdad cómo funciona el dinero.</p>
+        </div>
+        <div>
+          <h4>Newsletter</h4>
+          <ul><li><a href="#suscribirse">Suscribirme</a></li><li><a href="#articulos">Archivo</a></li><li><a href="index.html#articulos">Edición #01</a></li></ul>
+        </div>
+        <div>
+          <h4>Proyecto</h4>
+          <ul><li><a href="#filosofia">Filosofía</a></li><li><a href="#sobre-mi">Sobre mí</a></li></ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul><li><a href="#politica-privacidad">Política de privacidad</a></li><li><a href="#aviso-legal">Aviso legal</a></li></ul>
+        </div>
+      </div>
+
+      <div class="legal" id="aviso-legal">
+        <div>Aviso legal y notas</div>
+        <div>
+          <ol>
+            <li>El contenido de esta página web, así como el material distribuido a través de la newsletter "La Letra Pequeña", tiene un carácter exclusivamente educativo, divulgativo e informativo. En ningún caso constituye asesoramiento financiero, legal, fiscal o una recomendación de inversión en activos financieros.</li>
+            <li>Invertir conlleva riesgo de pérdida de capital. Las rentabilidades pasadas no garantizan rentabilidades futuras. Consulta a un profesional autorizado antes de tomar decisiones de inversión.</li>
+            <li>Los ejemplos numéricos de esta página son ilustrativos: 10.000 € invertidos durante 20 años con una rentabilidad bruta constante del 6 % anual, restando únicamente los gastos corrientes indicados. No representan ningún producto concreto.</li>
+          </ol>
+          <p class="copy">&copy; <span id="year"></span> @eduinvest. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    (function () {
+      'use strict';
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      /* --- Navbar: sólida al hacer scroll + menú móvil --- */
+      var nav = document.getElementById('nav');
+      var toggle = document.getElementById('navToggle');
+      function onScrollNav() { nav.classList.toggle('scrolled', window.scrollY > 24); }
+      window.addEventListener('scroll', onScrollNav, { passive: true });
+      onScrollNav();
+
+      toggle.addEventListener('click', function () {
+        var open = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+        toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      });
+      document.querySelectorAll('#navMobile a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      /* --- Cambio de tema por sección (firma de Mercury) --- */
+      var themed = document.querySelectorAll('[data-theme]:not(body)');
+      var themeObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) document.body.dataset.theme = e.target.dataset.theme;
+        });
+      }, { rootMargin: '-45% 0px -54% 0px' });
+      themed.forEach(function (s) { themeObs.observe(s); });
+
+      /* --- Aparición al hacer scroll --- */
+      var revObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal, .media-card, .quote-card').forEach(function (el) { revObs.observe(el); });
+
+      /* --- Portátil: se endereza y crece al hacer scroll --- */
+      var laptop = document.getElementById('laptop');
+      var ticking = false;
+      function updateLaptop() {
+        ticking = false;
+        var r = laptop.getBoundingClientRect();
+        var vh = window.innerHeight;
+        var p = Math.min(1, Math.max(0, (vh - r.top) / (vh * 0.9)));
+        var scale = 0.86 + 0.14 * p;
+        var tilt = 14 * (1 - p);
+        laptop.style.transform = 'rotateX(' + tilt.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+      }
+      if (!reduced) {
+        window.addEventListener('scroll', function () {
+          if (!ticking) { ticking = true; requestAnimationFrame(updateLaptop); }
+        }, { passive: true });
+        updateLaptop();
+      }
+
+      /* --- Acordeón con auto-avance y paneles sincronizados --- */
+      var acc = document.getElementById('acc');
+      var items = acc.querySelectorAll('.acc-item');
+      var panels = document.querySelectorAll('.ui-panel');
+      var DUR = 7000, timer = null, current = 0, paused = false;
+
+      function select(i, auto) {
+        current = i;
+        items.forEach(function (it, j) {
+          var on = j === i;
+          it.classList.toggle('active', on);
+          it.classList.remove('running');
+          it.querySelector('.acc-btn').setAttribute('aria-selected', on);
+        });
+        panels.forEach(function (p, j) { p.classList.toggle('active', j === i); });
+        schedule();
+      }
+
+      function schedule() {
+        clearTimeout(timer);
+        if (reduced || paused) return;
+        var it = items[current];
+        void it.offsetWidth; // reinicia la animación de la barra
+        it.classList.add('running');
+        timer = setTimeout(function () { select((current + 1) % items.length, true); }, DUR);
+      }
+
+      items.forEach(function (it, i) {
+        it.querySelector('.acc-btn').addEventListener('click', function () { select(i); });
+      });
+
+      var featureSection = document.getElementById('filosofia');
+      featureSection.addEventListener('mouseenter', function () { paused = true; clearTimeout(timer); items[current].classList.remove('running'); });
+      featureSection.addEventListener('mouseleave', function () { paused = false; schedule(); });
+
+      // Solo avanza cuando la sección está en pantalla
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { if (!paused) schedule(); }
+          else { clearTimeout(timer); items[current].classList.remove('running'); }
+        });
+      }, { threshold: 0.3 }).observe(featureSection);
+
+      /* --- Acordeón simple (Sobre mí) --- */
+      document.querySelectorAll('.acc-static').forEach(function (group) {
+        var its = group.querySelectorAll('.acc-item');
+        its.forEach(function (it) {
+          it.querySelector('.acc-btn').addEventListener('click', function () {
+            its.forEach(function (o) {
+              var on = o === it;
+              o.classList.toggle('active', on);
+              o.querySelector('.acc-btn').setAttribute('aria-expanded', on);
+            });
+          });
+        });
+      });
+
+      /* --- Contadores --- */
+      var countObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          countObs.unobserve(e.target);
+          var el = e.target, to = +el.dataset.to;
+          if (reduced || to === 0) { el.textContent = to; return; }
+          var start = performance.now(), d = 1400;
+          (function step(t) {
+            var k = Math.min(1, (t - start) / d);
+            el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+            if (k < 1) requestAnimationFrame(step);
+          })(start);
+        });
+      }, { threshold: 0.6 });
+      document.querySelectorAll('.count').forEach(function (c) { c.textContent = '0'; countObs.observe(c); });
+
+      /* --- Formularios de suscripción --- */
+      var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      document.querySelectorAll('.js-subscribe').forEach(function (form) {
+        var email = form.querySelector('input[type=email]');
+        var privacy = form.querySelector('input[name=privacy]');
+        var pill = form.querySelector('.email-pill');
+        var msg = form.querySelector('.form-msg');
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          msg.className = 'form-msg';
+          if (!emailRe.test(email.value.trim())) {
+            pill.classList.add('error');
+            msg.classList.add('err');
+            msg.textContent = 'Introduce un email válido.';
+            email.focus();
+            return;
+          }
+          pill.classList.remove('error');
+          if (!privacy.checked) {
+            msg.classList.add('err');
+            msg.textContent = 'Debes aceptar la política de privacidad.';
+            privacy.focus();
+            return;
+          }
+          // NOTA: conectar aquí con el proveedor de email (Beehiiv, Substack, Mailchimp…)
+          msg.classList.add('ok');
+          msg.textContent = '¡Dentro! Revisa tu bandeja para confirmar la suscripción.';
+          form.querySelector('button[type=submit]').disabled = true;
+        });
+        email.addEventListener('input', function () { pill.classList.remove('error'); });
+      });
+    })();
+  </script>
+</body>
+</html>
