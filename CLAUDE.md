@@ -2,6 +2,7 @@
 
 Memoria del proyecto para Claude. Léela entera antes de tocar nada.
 Estado actual y próximos pasos: **`ESTADO.md`**. Guía del diseño estilo Mercury: **`docs/DISENO-MERCURY.md`**.
+Historial, decisiones, preferencias del usuario y preguntas abiertas (traspaso del chat cloud, 20/11/2026): **`docs/TRASPASO.md`**.
 
 ## Qué es
 
@@ -25,6 +26,7 @@ Tono: transparencia radical, rigor analítico, disciplina, anti-vendehumos. Est�
 | `IMAGEN EDU TRADING.png` | Foto de Edu (vertical, 1086×1448, 1,8 MB). **El nombre tiene espacios** → en HTML se escribe `IMAGEN%20EDU%20TRADING.png`. |
 | `ESTADO.md` | Estado del proyecto, decisiones y tareas pendientes. Actualízalo al terminar cada tarea. |
 | `docs/DISENO-MERCURY.md` | Análisis del diseño de Mercury y cómo se tradujo a la marca. |
+| `docs/TRASPASO.md` | Traspaso completo del chat cloud: historial con commits, decisiones (también las descartadas), preferencias de diseño, ideas, Beehiiv, problemas técnicos y preguntas sin contestar. |
 | `.claude/skills/` | Skills del proyecto: `nuevo-articulo`, `verificar-web`, `publicar-cambios`. |
 
 ## Estructura de `index.html` (orden en la página)
