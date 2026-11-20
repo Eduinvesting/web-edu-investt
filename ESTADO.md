@@ -25,7 +25,8 @@ La web está publicada y funcionando con el formulario real de Beehiiv. Hay una 
 | 16/11/2026 | Análisis de mercury.com y creación de `preview-mercury.html` | `77d2f7c` |
 | 18/11/2026 | Archivos de traspaso: `CLAUDE.md`, `ESTADO.md`, `docs/DISENO-MERCURY.md`, skills; ZIP del proyecto enviado al usuario | `b2e5641` |
 | 20/11/2026 | `docs/TRASPASO.md` y este ESTADO actualizado para el chat madre | `2d2067c` |
-| 20/11/2026 | Repo clonado en el ordenador del usuario; primera publicación desde el chat madre | (este commit) |
+| 20/11/2026 | Repo clonado en el ordenador del usuario; primera publicación desde el chat madre | `f9a0c5d` |
+| 20/11/2026 | Fase 1 (parte 1): cifras del oro verificadas y corregidas con fuentes (WGC, RBC, FRED) y nota de corrección; maqueta «#47» sustituida por un ejemplo sin fecha falsa; quitado el enlace duplicado «Filosofía»; «cartera familiar» → «Invierto mi propio dinero»; titular de artículos comprobable; quitada la horquilla 5-15 % de oro en cartera (sonaba a recomendación) | (este commit) |
 
 ## Pendiente (por prioridad)
 

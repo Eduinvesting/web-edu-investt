@@ -1461,6 +1461,29 @@
     }
 
     /* Modal disclaimer */
+    .article-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+    /* Fuentes bajo la caja de datos y nota de corrección (rigor: cada cifra con su fuente) */
+    .article-sources {
+      margin-top: 14px;
+      font-size: 0.72rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .article-sources a { color: var(--text-secondary); text-decoration: underline; text-underline-offset: 2px; }
+    .article-sources a:hover { color: var(--accent); }
+    .article-correction {
+      margin-top: 32px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .article-correction strong { color: var(--text-primary); }
+
     .modal-disclaimer {
       margin-top: 40px;
       padding-top: 24px;
@@ -1553,7 +1576,6 @@
           <li><a href="#newsletter">La Newsletter</a></li>
           <li><a href="#articulos">Artículos</a></li>
           <li><a href="#sobre-mi">Sobre mí</a></li>
-          <li><a href="#filosofia">Filosofía</a></li>
         </ul>
 
         <!-- Desktop CTA -->
@@ -1577,7 +1599,6 @@
       <a href="#newsletter" class="nav-mobile-link">La Newsletter</a>
       <a href="#articulos" class="nav-mobile-link">Artículos</a>
       <a href="#sobre-mi" class="nav-mobile-link">Sobre mí</a>
-      <a href="#filosofia" class="nav-mobile-link">Filosofía</a>
       <a href="#suscripcion" class="btn-primary">Suscribirme</a>
     </nav>
   </header>
@@ -1755,7 +1776,7 @@
               <div class="sobre-mi-block reveal">
                 <div class="sobre-mi-block-label">Quién soy</div>
                 <p>
-                  Tengo 21 años, me he graduado en ADE y llevo 2-3 años apasionado por los mercados financieros. Soy fundador de EduInvest y la newsletter "La Letra Pequeña". Gestiono mi cartera propia y la familiar, y mi objetivo es claro: acabar en una gestora de fondos y llevar carteras de forma independiente. Soy un aprendiz en construcción, y eso es precisamente lo que me hace diferente.
+                  Tengo 21 años, me he graduado en ADE y llevo 2-3 años apasionado por los mercados financieros. Soy fundador de EduInvest y la newsletter "La Letra Pequeña". Invierto mi propio dinero, y mi objetivo es claro: acabar en una gestora de fondos y llevar carteras de forma independiente. Soy un aprendiz en construcción, y eso es precisamente lo que me hace diferente.
                 </p>
               </div>
 
@@ -1784,7 +1805,7 @@
 
         <div class="section-header reveal">
           <p class="section-tag">Archivo · La Letra Pequeña</p>
-          <h2 id="articulos-heading">Análisis que no encontrarás<br />en <span class="accent">ningún otro sitio</span></h2>
+          <h2 id="articulos-heading">Análisis con fecha<br />y <span class="accent">con fuentes</span></h2>
           <p class="section-subtitle">Cada edición, un tema. Sin relleno, sin agenda comercial. Solo el análisis que mereces.</p>
         </div>
 
@@ -1901,7 +1922,7 @@
             <h2>El motor técnico: tipos reales negativos</h2>
 
             <p>
-              El principal driver del precio del oro no es el miedo genérico: es la evolución de los <strong>tipos de interés reales</strong> (tipos nominales menos inflación esperada). La correlación es robusta, documentada y tiene una lógica económica perfectamente coherente.
+              El principal driver del precio del oro no es el miedo genérico: es la evolución de los <strong>tipos de interés reales</strong> (tipos nominales menos inflación esperada). Durante casi dos décadas la relación fue muy estrecha y tiene una lógica económica coherente. Pero, como verás en los datos, desde 2022 se ha debilitado, y entender por qué es parte de la letra pequeña.
             </p>
 
             <p>
@@ -1919,18 +1940,23 @@
               <div class="article-databox-label">Datos clave · Correlación oro / tipos reales</div>
               <div class="article-databox-grid">
                 <div class="databox-item">
-                  <div class="databox-value">−0.82</div>
-                  <div class="databox-label">Correlación histórica oro vs. TIPS 10Y EE.UU.</div>
+                  <div class="databox-value">84%</div>
+                  <div class="databox-label">Del movimiento del oro ligado al tipo real a 10 años de EE.UU. entre 2005 y 2021 (R²). En 2022-2023, solo un 3%</div>
                 </div>
                 <div class="databox-item">
-                  <div class="databox-value">+68%</div>
-                  <div class="databox-label">Subida del oro en 2020 (tipos reales al −1%)</div>
+                  <div class="databox-value">+24,6%</div>
+                  <div class="databox-label">Subida del oro en 2020 (en dólares), con el tipo real a 10 años cayendo hasta el −1%</div>
                 </div>
                 <div class="databox-item">
-                  <div class="databox-value">−28%</div>
-                  <div class="databox-label">Caída del oro en 2022 (tipos reales al +1.5%)</div>
+                  <div class="databox-value">+0,4%</div>
+                  <div class="databox-label">Oro en 2022 (en dólares), aunque el tipo real a 10 años pasó de −0,7% a +1,4%</div>
                 </div>
               </div>
+              <p class="article-sources">
+                Fuentes: R² de <a href="https://www.rbcwealthmanagement.com/en-us/insights/golds-regime-change" target="_blank" rel="noopener">RBC Wealth Management (jun-2025)</a>.
+                Rentabilidad del oro: World Gold Council, <a href="https://www.gold.org/goldhub/research/outlook-2021" target="_blank" rel="noopener">Gold Outlook 2021</a> y <a href="https://www.gold.org/goldhub/research/gold-market-commentary-december-2022" target="_blank" rel="noopener">Gold Market Commentary dic-2022</a>.
+                Tipo real a 10 años (medias mensuales): Reserva Federal de St. Louis, <a href="https://fred.stlouisfed.org/series/FII10" target="_blank" rel="noopener">serie FII10</a>.
+              </p>
             </div>
 
             <h2>Desarrollo: más allá del refugio — los tres factores ignorados</h2>
@@ -1940,15 +1966,15 @@
             </p>
 
             <p>
-              <strong>1. Demanda de bancos centrales:</strong> Desde 2010, y de forma acelerada tras las sanciones a Rusia en 2022, los bancos centrales de economías emergentes —China, India, Polonia, Turquía— llevan comprando oro de forma sistemática para reducir su exposición al dólar. En 2023, los bancos centrales compraron más de 1.000 toneladas de oro por segundo año consecutivo. Esto no es un fenómeno cíclico: es una tendencia estructural de dedolarización que tiene décadas por delante.
+              <strong>1. Demanda de bancos centrales:</strong> Desde 2010, y de forma acelerada tras las sanciones a Rusia en 2022, los bancos centrales de economías emergentes —China, India, Polonia, Turquía— llevan comprando oro de forma sistemática para reducir su exposición al dólar. En 2023, los bancos centrales compraron 1.037 toneladas de oro, más de 1.000 por segundo año consecutivo (<a href="https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-full-year-2023/central-banks" target="_blank" rel="noopener">World Gold Council</a>). Eso explica buena parte de por qué en 2022 el oro aguantó aunque los tipos reales subían. Esto no es un fenómeno cíclico: es una tendencia estructural de dedolarización que tiene décadas por delante.
             </p>
 
             <p>
-              <strong>2. Demanda industrial y tecnológica:</strong> El oro no es solo joyería y lingotes. Es un conductor eléctrico excepcional con resistencia a la corrosión que lo hace imprescindible en electrónica de precisión, conectores, semiconductores y, de forma creciente, en tecnología médica y aeroespacial. Aproximadamente el 10% de la demanda anual es industrial, y ese porcentaje crece. No es el factor dominante del precio, pero añade un suelo estructural que la narrativa "refugio" ignora.
+              <strong>2. Demanda industrial y tecnológica:</strong> El oro no es solo joyería y lingotes. Es un conductor eléctrico excepcional con resistencia a la corrosión que lo hace imprescindible en electrónica de precisión, conectores, semiconductores y, de forma creciente, en tecnología médica y aeroespacial. La tecnología se llevó 298 toneladas en 2023, en torno al 7% de la demanda total, y la mayor parte fue electrónica (<a href="https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-full-year-2023/technology" target="_blank" rel="noopener">World Gold Council</a>). Es una demanda estable pero pequeña, y en 2023 marcó el mínimo de la serie: no mueve el precio, pero la narrativa "refugio" la ignora.
             </p>
 
             <p>
-              <strong>3. Comportamiento en distintos ciclos de mercado:</strong> La correlación del oro con la renta variable es cercana a cero a largo plazo, pero varía significativamente según el régimen de mercado. En recesiones deflacionarias (2008-2009), el oro inicialmente cae junto a todo lo demás, porque los inversores liquidan posiciones para cubrir pérdidas en otros activos. Pero se recupera mucho más rápido. En entornos de estanflación (inflación + bajo crecimiento, como los años 70 o 2022), el oro brilla con especial intensidad. En expansiones con tipos bajos (2009-2020), también sube. El único entorno donde pierde atractivo de forma sostenida es el de crecimiento sólido con tipos reales positivos y altos.
+              <strong>3. Comportamiento en distintos ciclos de mercado:</strong> La correlación del oro con la renta variable es cercana a cero a largo plazo, pero varía significativamente según el régimen de mercado. En recesiones deflacionarias (2008-2009), el oro inicialmente cae junto a todo lo demás, porque los inversores liquidan posiciones para cubrir pérdidas en otros activos. Pero se recupera mucho más rápido. En la estanflación de los años 70 (inflación + bajo crecimiento), el oro brilló con especial intensidad. En 2022, con inflación alta pero tipos reales subiendo con fuerza, se quedó prácticamente plano en dólares: ni brilló ni se hundió. En expansiones con tipos bajos (2009-2020), también subió. El único entorno donde pierde atractivo de forma sostenida es el de crecimiento sólido con tipos reales positivos y altos.
             </p>
 
             <div class="article-pullquote">
@@ -1962,7 +1988,7 @@
             </p>
 
             <p>
-              No es una apuesta al apocalipsis. Es una cobertura eficiente contra la pérdida de valor de las divisas fiduciarias, contra los tipos reales negativos y contra la inestabilidad geopolítica que fragmenta el orden financiero global. En ese sentido, puede tener un lugar en una cartera diversificada —típicamente entre un 5% y un 15%— no como especulación, sino como póliza de seguro con fundamento macroeconómico.
+              No es una apuesta al apocalipsis. Es una cobertura eficiente contra la pérdida de valor de las divisas fiduciarias, contra los tipos reales negativos y contra la inestabilidad geopolítica que fragmenta el orden financiero global. En ese sentido, quien lo incluye en una cartera diversificada suele hacerlo no como especulación, sino como póliza de seguro con fundamento macroeconómico.
             </p>
 
             <p>
@@ -1972,6 +1998,10 @@
             <p>
               <strong>La pregunta que debes hacerte antes de incluir oro en cartera no es "¿está el mundo en peligro?". La pregunta correcta es: "¿cuál es mi visión sobre los tipos reales en los próximos 12-24 meses, y qué peso tienen la dedolarización y el riesgo geopolítico en mi tesis de inversión?"</strong>
             </p>
+
+            <div class="article-correction">
+              <strong>Corrección · noviembre de 2026.</strong> La primera versión de este artículo daba cifras sin fuente que eran erróneas: una subida del oro del 68% en 2020 (fue del 24,6%), una caída del 28% en 2022 (subió un 0,4%), una correlación de −0,82 que no he podido documentar y un 10% de demanda industrial (es en torno al 7%). Las he sustituido por datos con su fuente. Equivocarse es parte de aprender; esconderlo, no.
+            </div>
 
             <div class="modal-disclaimer">
               Este artículo tiene carácter exclusivamente educativo e informativo. No constituye asesoramiento financiero ni recomendación de inversión. Invertir en materias primas implica riesgo de pérdida de capital.
@@ -1998,7 +2028,7 @@
                 <span class="dot-yel"></span>
                 <span class="dot-grn"></span>
               </div>
-              <div class="preview-title-bar">La Letra Pequeña — Edición #47</div>
+              <div class="preview-title-bar">La Letra Pequeña — Ejemplo de edición</div>
             </div>
 
             <div class="preview-body">
@@ -2006,21 +2036,21 @@
                 <div class="preview-avatar" aria-hidden="true">ei</div>
                 <div>
                   <div class="preview-sender">@eduinvest</div>
-                  <div class="preview-date">Lunes, 23 junio 2025 · 8:00 AM</div>
+                  <div class="preview-date">Cada lunes · 8:00</div>
                 </div>
               </div>
 
               <h3 class="preview-heading">
-                ¿Por qué el BCE está a punto de cometer el mismo error que en 2011?
+                Un beneficio auditado no es un beneficio de calidad
               </h3>
 
               <p class="preview-text">
-                Los tipos de referencia en la Eurozona llevan 14 meses en territorio restrictivo. Los datos de PMI manufacturero anticipan contracción. Sin embargo, Lagarde mantiene un discurso hawkish. Aquí explicamos qué hay detrás y cómo posicionar tu cartera ante un posible giro de 180 grados...
+                Unas cuentas pueden estar perfectamente auditadas y aun así decir poco de la calidad de lo que gana una empresa. Esta semana: qué parte del beneficio es caja y qué parte es estimación, y los tres filtros que usan los analistas para detectarlo (y lo que se les escapa)...
               </p>
 
-              <!-- Mini bar chart -->
+              <!-- Mini bar chart (decorativo) -->
               <div class="preview-chart" aria-hidden="true">
-                <div class="chart-label">Tipos de interés BCE — Evolución 12M</div>
+                <div class="chart-label">Beneficio vs. caja — ejemplo ilustrativo</div>
                 <div class="chart-bars">
                   <div class="chart-bar" style="height: 30%"></div>
                   <div class="chart-bar" style="height: 48%"></div>
@@ -2038,26 +2068,26 @@
               </div>
 
               <div class="preview-tag-row" aria-hidden="true">
-                <span class="preview-tag">Política Monetaria</span>
-                <span class="preview-tag">BCE</span>
-                <span class="preview-tag">Renta Fija</span>
-                <span class="preview-tag">Inflación</span>
+                <span class="preview-tag">Análisis fundamental</span>
+                <span class="preview-tag">Contabilidad</span>
+                <span class="preview-tag">Calidad del beneficio</span>
+                <span class="preview-tag">Renta variable</span>
               </div>
 
               <div class="preview-divider" aria-hidden="true"></div>
 
               <div class="preview-stat-row" aria-hidden="true">
                 <div class="preview-stat">
-                  <div class="preview-stat-val">4.1%</div>
-                  <div class="preview-stat-lbl">Tipo depósito</div>
+                  <div class="preview-stat-val">3</div>
+                  <div class="preview-stat-lbl">Filtros explicados</div>
                 </div>
                 <div class="preview-stat">
-                  <div class="preview-stat-val">2.6%</div>
-                  <div class="preview-stat-lbl">IPC Eurozona</div>
+                  <div class="preview-stat-val">1</div>
+                  <div class="preview-stat-lbl">Pregunta para pensar</div>
                 </div>
                 <div class="preview-stat">
-                  <div class="preview-stat-val">−0.4</div>
-                  <div class="preview-stat-lbl">PMI Manuf.</div>
+                  <div class="preview-stat-val">0</div>
+                  <div class="preview-stat-lbl">Recomendaciones</div>
                 </div>
               </div>
 
