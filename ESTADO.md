@@ -24,7 +24,8 @@ La web está publicada y funcionando con el formulario real de Beehiiv. Hay una 
 | 16/11/2026 | Búsqueda de referentes de diseño (competencia y webs fintech); el usuario elige Mercury | — |
 | 16/11/2026 | Análisis de mercury.com y creación de `preview-mercury.html` | `77d2f7c` |
 | 18/11/2026 | Archivos de traspaso: `CLAUDE.md`, `ESTADO.md`, `docs/DISENO-MERCURY.md`, skills; ZIP del proyecto enviado al usuario | `b2e5641` |
-| 20/11/2026 | `docs/TRASPASO.md` y este ESTADO actualizado para el chat madre | «docs: traspaso al chat madre» |
+| 20/11/2026 | `docs/TRASPASO.md` y este ESTADO actualizado para el chat madre | `2d2067c` |
+| 20/11/2026 | Repo clonado en el ordenador del usuario; primera publicación desde el chat madre | (este commit) |
 
 ## Pendiente (por prioridad)
 
@@ -72,5 +73,5 @@ Las decisiones descartadas, las preferencias de diseño, las ideas pendientes y 
 
 ## Entorno
 
-- **Ahora:** chat madre en el ordenador del usuario. Revisa allí si hay Node.js y Playwright para la skill `verificar-web`.
+- **Ahora:** chat madre en el ordenador del usuario (Windows). Clon en `D:\Nueva carpeta\Escritorio\eduinvest\web-edu-investt`. El plan general del proyecto vive fuera del repo, en `D:\Nueva carpeta\Escritorio\eduinvest\secuencia.md`. Node.js 24 y Playwright 1.64.1 instalados; Playwright está en `..\.herramientas` (fuera del repo, para no meter `node_modules` aquí). Ver la skill `verificar-web`.
 - **Antes (chat cloud, en desuso):** entorno «email» con red limitada (gestores de paquetes, webs financieras/oficiales y `mercury.com`); Chromium y Playwright venían preinstalados. Detalle en `docs/TRASPASO.md`, sección 10.

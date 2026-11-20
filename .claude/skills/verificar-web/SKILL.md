@@ -16,7 +16,11 @@ node .claude/skills/verificar-web/capturas.js preview-mercury.html /ruta/de/sali
 - 1.º argumento: archivo HTML del proyecto (por defecto `index.html`).
 - 2.º argumento: carpeta de salida. Por defecto, `capturas/` dentro del directorio temporal del sistema. En Claude Code, mejor usar la carpeta scratchpad de la sesión.
 - **Entorno cloud de Claude:** Chromium y Playwright ya vienen instalados; `require('playwright')` funciona. **No ejecutes `playwright install`.**
-- **En un ordenador local** sin Playwright: `npm i -D playwright && npx playwright install chromium` (una sola vez).
+- **En el ordenador del usuario (Windows):** Playwright está instalado fuera del repo, en `..\.herramientas`. Ejecuta el script indicándole dónde está:
+  ```bash
+  NODE_PATH="D:/Nueva carpeta/Escritorio/eduinvest/.herramientas/node_modules" node .claude/skills/verificar-web/capturas.js index.html <carpeta-scratchpad>
+  ```
+  No instales Playwright dentro del repo. Con Node 24, Playwright 1.48 falla al abrir Chromium (`spawn UNKNOWN`); la 1.64.1 funciona.
 
 ## Qué hace
 
@@ -40,5 +44,6 @@ Para probar formularios, acordeones o modales, añade pasos al script o escribe 
 ## Falsos positivos conocidos
 
 - `Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED`: es el script de Beehiiv (`subscribe-forms.beehiiv.com`) bloqueado por la red del entorno cloud. El hueco del formulario aparecerá vacío en la captura; no es un fallo de la web.
+- `Framing 'https://subscribe-forms.beehiiv.com/' violates ... frame-ancestors *`: aparece en local porque el script abre la página como archivo (`file://`) y Beehiiv solo permite insertarse en páginas `http(s)`. En la web publicada no pasa.
 - El logo `@eduinvest` (28 px) y el botón "Leer" (16 px, `aria-hidden`) de las tarjetas de artículo: toda la tarjeta es clicable, así que no son fallos.
 - El botón ✕ del modal mide 36 px: sí es un fallo pendiente (ver `ESTADO.md`).
